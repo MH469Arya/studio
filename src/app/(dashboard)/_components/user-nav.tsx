@@ -1,6 +1,6 @@
 'use client';
 
-import { Globe, LifeBuoy, LogOut, Settings, User } from 'lucide-react';
+import { Globe, LifeBuoy, LogOut, Settings, User, Check } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,11 +9,18 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuPortal,
+  DropdownMenuSubContent
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useLanguage } from './language-provider';
 
 export function UserNav() {
+  const { locale, setLocale } = useLanguage();
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -45,10 +52,24 @@ export function UserNav() {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger>
             <Globe />
             Choose Language
-        </DropdownMenuItem>
+          </DropdownMenuSubTrigger>
+          <DropdownMenuPortal>
+            <DropdownMenuSubContent>
+              <DropdownMenuItem onClick={() => setLocale('en')}>
+                <span className="w-6">{locale === 'en' && <Check />}</span>
+                English
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setLocale('hi')}>
+                 <span className="w-6">{locale === 'hi' && <Check />}</span>
+                Hindi
+              </DropdownMenuItem>
+            </DropdownMenuSubContent>
+          </DropdownMenuPortal>
+        </DropdownMenuSub>
         <DropdownMenuItem>
           <LifeBuoy />
           Support

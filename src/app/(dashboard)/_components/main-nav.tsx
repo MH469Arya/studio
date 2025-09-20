@@ -23,6 +23,7 @@ import {
   SidebarMenuSubItem,
   SidebarMenuSubButton,
 } from '@/components/ui/sidebar';
+import { useLanguage } from './language-provider';
 
 const menuItems = [
   {
@@ -74,6 +75,7 @@ const menuItems = [
 
 export function MainNav({ className }: { className?: string }) {
   const pathname = usePathname();
+  const { t } = useLanguage();
 
   return (
     <nav className={cn('flex flex-col', className)}>
@@ -83,10 +85,10 @@ export function MainNav({ className }: { className?: string }) {
             <SidebarMenuItem key={item.label} id={item.id}>
               <SidebarMenuButton
                 isActive={item.subItems.some((sub) => pathname.startsWith(sub.href))}
-                tooltip={item.label}
+                tooltip={t(item.label)}
               >
                 <item.icon />
-                <span>{item.label}</span>
+                <span>{t(item.label)}</span>
               </SidebarMenuButton>
               <SidebarMenuSub>
                 {item.subItems.map((subItem) => (
@@ -98,7 +100,7 @@ export function MainNav({ className }: { className?: string }) {
                     >
                       <Link href={subItem.href}>
                         <subItem.icon />
-                        <span>{subItem.label}</span>
+                        <span>{t(subItem.label)}</span>
                       </Link>
                     </SidebarMenuSubButton>
                   </SidebarMenuSubItem>
@@ -110,11 +112,11 @@ export function MainNav({ className }: { className?: string }) {
               <SidebarMenuButton
                 asChild
                 isActive={pathname === item.href}
-                tooltip={item.label}
+                tooltip={t(item.label)}
               >
                 <Link href={item.href}>
                   <item.icon />
-                  <span>{item.label}</span>
+                  <span>{t(item.label)}</span>
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>

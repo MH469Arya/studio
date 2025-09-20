@@ -11,6 +11,7 @@ import {
 import { MainNav } from './_components/main-nav';
 import { Header } from './_components/header';
 import { TourProvider } from './_components/tour-provider';
+import { LanguageProvider } from './_components/language-provider';
 
 export default function DashboardLayout({
   children,
@@ -18,30 +19,32 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <TourProvider>
-      <SidebarProvider>
-        <Sidebar>
-          <SidebarHeader>
-            <Link href="/" className="flex items-center gap-2">
-              <img
-                src="/assets/iconcm.svg"
-                alt="KalConnect Logo"
-                style={{ height: '40px', width: '40px', marginRight: '8px' }}
-              />
-              <span className="text-xl font-bold font-headline tracking-tight">
-                KalConnect
-              </span>
-            </Link>
-          </SidebarHeader>
-          <SidebarContent>
-            <MainNav />
-          </SidebarContent>
-        </Sidebar>
-        <SidebarInset>
-          <Header />
-          {children}
-        </SidebarInset>
-      </SidebarProvider>
-    </TourProvider>
+    <LanguageProvider>
+      <TourProvider>
+        <SidebarProvider>
+          <Sidebar>
+            <SidebarHeader>
+              <Link href="/" className="flex items-center gap-2">
+                <img
+                  src="/assets/iconcm.svg"
+                  alt="KalConnect Logo"
+                  style={{ height: '40px', width: '40px', marginRight: '8px' }}
+                />
+                <span className="text-xl font-bold font-headline tracking-tight">
+                  KalConnect
+                </span>
+              </Link>
+            </SidebarHeader>
+            <SidebarContent>
+              <MainNav />
+            </SidebarContent>
+          </Sidebar>
+          <SidebarInset>
+            <Header />
+            {children}
+          </SidebarInset>
+        </SidebarProvider>
+      </TourProvider>
+    </LanguageProvider>
   );
 }
