@@ -1,5 +1,6 @@
 import * as React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 import {
   SidebarProvider,
@@ -8,7 +9,6 @@ import {
   SidebarContent,
   SidebarInset,
 } from '@/components/ui/sidebar';
-import { Logo } from '@/components/logo';
 import { MainNav } from './_components/main-nav';
 import { Header } from './_components/header';
 import { TourProvider } from './_components/tour-provider';
@@ -24,7 +24,7 @@ export default function DashboardLayout({
         <Sidebar>
           <SidebarHeader>
             <Link href="/" className="flex items-center gap-2">
-              <Logo className="h-7 w-7" />
+              <Image src="/iconcm.png" alt="KalConnect Logo" width={28} height={28} className="h-7 w-7" />
               <span className="text-xl font-bold font-headline tracking-tight">
                 KalConnect
               </span>
