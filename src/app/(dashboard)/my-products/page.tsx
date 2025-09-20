@@ -27,7 +27,7 @@ const initialProducts = [
   {
     name: 'Ganjifa Cards',
     description: 'Traditional hand-painted playing cards from Odisha.',
-    imageUrl: 'https://picsum.photos/seed/ganjifa/564/564',
+    imageUrl: 'https://i.pinimg.com/564x/0f/52/39/0f52396b1b147a488339f010a30b9165.jpg',
     imageHint: 'Ganjifa cards',
     price: 1200,
     category: 'Games',
@@ -36,7 +36,7 @@ const initialProducts = [
   {
     name: 'Kolhapuri Chappals',
     description: 'Handcrafted leather sandals from Maharashtra.',
-    imageUrl: 'https://picsum.photos/seed/chappals/564/564',
+    imageUrl: 'https://i.pinimg.com/564x/b8/9f/c6/b89fc665f80931561b373f15a1a10839.jpg',
     imageHint: 'leather sandals',
     price: 1800,
     category: 'Footwear',
