@@ -15,10 +15,15 @@ const TranslateTextInputSchema = z.object({
 });
 export type TranslateTextInput = z.infer<typeof TranslateTextInputSchema>;
 
+const TranslationPairSchema = z.object({
+  english: z.string().describe('The original English text.'),
+  hindi: z.string().describe('The Hindi translation.'),
+});
+
 const TranslateTextOutputSchema = z.object({
   translations: z
-    .record(z.string(), z.string())
-    .describe('A map of English text to its Hindi translation.'),
+    .array(TranslationPairSchema)
+    .describe('An array of translation pairs.'),
 });
 export type TranslateTextOutput = z.infer<typeof TranslateTextOutputSchema>;
 
@@ -31,7 +36,7 @@ const prompt = ai.definePrompt({
   input: {schema: TranslateTextInputSchema},
   output: {schema: TranslateTextOutputSchema},
   prompt: `You are a professional translator. Translate the following English texts to Hindi.
-Return the result as a JSON object where the keys are the original English strings and the values are their Hindi translations.
+Return the result as a JSON object containing a 'translations' array. Each item in the array should be an object with 'english' and 'hindi' keys.
 
 English Texts:
 {{#each texts}}
@@ -48,7 +53,7 @@ const translateTextFlow = ai.defineFlow(
   },
   async input => {
     if (input.texts.length === 0) {
-      return { translations: {} };
+      return { translations: [] };
     }
     const {output} = await prompt(input);
     return output!;

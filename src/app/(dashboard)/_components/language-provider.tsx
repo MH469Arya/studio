@@ -47,7 +47,11 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         const uniqueTexts = Array.from(new Set(textsToTranslate));
         const result = await translateText({ texts: uniqueTexts });
         if (result.translations) {
-            setTranslations(prev => ({ ...prev, ...result.translations }));
+            const newTranslations = result.translations.reduce((acc, pair) => {
+              acc[pair.english] = pair.hindi;
+              return acc;
+            }, {} as Record<string, string>);
+            setTranslations(prev => ({ ...prev, ...newTranslations }));
         }
 
     } catch (error) {
