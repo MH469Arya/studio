@@ -11,6 +11,7 @@ import {
 import { Logo } from '@/components/logo';
 import { MainNav } from './_components/main-nav';
 import { Header } from './_components/header';
+import { TourProvider } from './_components/tour-provider';
 
 export default function DashboardLayout({
   children,
@@ -18,24 +19,26 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <SidebarProvider>
-      <Sidebar>
-        <SidebarHeader>
-          <Link href="/" className="flex items-center gap-2">
-            <Logo className="h-7 w-7" />
-            <span className="text-xl font-bold font-headline tracking-tight">
-              KalConnect
-            </span>
-          </Link>
-        </SidebarHeader>
-        <SidebarContent>
-          <MainNav />
-        </SidebarContent>
-      </Sidebar>
-      <SidebarInset>
-        <Header />
-        {children}
-      </SidebarInset>
-    </SidebarProvider>
+    <TourProvider>
+      <SidebarProvider>
+        <Sidebar>
+          <SidebarHeader>
+            <Link href="/" className="flex items-center gap-2">
+              <Logo className="h-7 w-7" />
+              <span className="text-xl font-bold font-headline tracking-tight">
+                KalConnect
+              </span>
+            </Link>
+          </SidebarHeader>
+          <SidebarContent>
+            <MainNav />
+          </SidebarContent>
+        </Sidebar>
+        <SidebarInset>
+          <Header />
+          {children}
+        </SidebarInset>
+      </SidebarProvider>
+    </TourProvider>
   );
 }

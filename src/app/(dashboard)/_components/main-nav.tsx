@@ -29,20 +29,24 @@ const menuItems = [
     href: '/',
     label: 'Dashboard',
     icon: LayoutGrid,
+    id: 'nav-dashboard',
   },
   {
     href: '/orders',
     label: 'Orders',
     icon: Package,
+    id: 'nav-orders',
   },
   {
     href: '/my-products',
     label: 'My Products',
     icon: ShoppingBag,
+    id: 'nav-my-products',
   },
   {
     label: 'AI Tools',
     icon: Sparkles,
+    id: 'nav-ai-tools',
     subItems: [
       {
         href: '/products',
@@ -76,7 +80,7 @@ export function MainNav({ className }: { className?: string }) {
       <SidebarMenu>
         {menuItems.map((item) =>
           item.subItems ? (
-            <SidebarMenuItem key={item.label}>
+            <SidebarMenuItem key={item.label} id={item.id}>
               <SidebarMenuButton
                 isActive={item.subItems.some((sub) => pathname.startsWith(sub.href))}
                 tooltip={item.label}
@@ -102,7 +106,7 @@ export function MainNav({ className }: { className?: string }) {
               </SidebarMenuSub>
             </SidebarMenuItem>
           ) : (
-            <SidebarMenuItem key={item.href}>
+            <SidebarMenuItem key={item.href} id={item.id}>
               <SidebarMenuButton
                 asChild
                 isActive={pathname === item.href}
