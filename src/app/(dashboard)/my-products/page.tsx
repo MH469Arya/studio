@@ -1,4 +1,3 @@
-
 'use client';
 
 import Image from 'next/image';
@@ -15,19 +14,20 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { PlusCircle } from 'lucide-react';
+import { PlusCircle, Pencil } from 'lucide-react';
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 
 const initialProducts = [
   {
     name: 'Ganjifa Cards',
     description: 'Traditional hand-painted playing cards from Odisha.',
-    imageUrl: 'https://i.pinimg.com/736x/1d/e1/f6/1de1f652bbc42b47cbf5574815456755.jpg',
+    imageUrl: 'https://picsum.photos/seed/ganjifa/400/400',
     imageHint: 'Ganjifa cards',
     price: 259,
     category: 'Games',
@@ -36,7 +36,7 @@ const initialProducts = [
   {
     name: 'Kolhapuri Chappals',
     description: 'Handcrafted leather sandals from Maharashtra.',
-    imageUrl: 'https://i.pinimg.com/1200x/83/3d/73/833d733aa2c526961a164280efa52c4e.jpg',
+    imageUrl: 'https://picsum.photos/seed/kolhapuri/400/400',
     imageHint: 'leather sandals',
     price: 469,
     category: 'Footwear',
@@ -139,11 +139,19 @@ export default function MyProductsPage() {
                 data-ai-hint={product.imageHint}
               />
             </div>
-            <CardHeader>
+            <CardHeader className="flex flex-row items-start justify-between">
               <CardTitle className="font-headline text-lg">{product.name}</CardTitle>
+              <Button variant="ghost" size="icon" className="h-8 w-8">
+                <Pencil className="h-4 w-4"/>
+              </Button>
             </CardHeader>
-            <CardContent>
+            <CardContent className="pt-0 grid gap-2">
               <p className="text-sm text-muted-foreground">{product.description}</p>
+              <div className="flex justify-between items-center">
+                <p className="text-lg font-semibold">₹{product.price}</p>
+                <Badge variant="outline">Stock: {product.stock}</Badge>
+              </div>
+               <p className="text-sm text-muted-foreground">Category: {product.category}</p>
             </CardContent>
           </Card>
         ))}
