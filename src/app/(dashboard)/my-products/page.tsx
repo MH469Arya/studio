@@ -27,7 +27,7 @@ const initialProducts = [
   {
     name: 'Ganjifa Cards',
     description: 'Traditional hand-painted playing cards from Odisha.',
-    imageUrl: 'https://i.pinimg.com/564x/0f/52/39/0f52396b1b147a488339f010a30b9165.jpg',
+    imageUrl: 'https://picsum.photos/seed/ganjifa/564/564',
     imageHint: 'Ganjifa cards',
     price: 1200,
     category: 'Games',
@@ -36,7 +36,7 @@ const initialProducts = [
   {
     name: 'Kolhapuri Chappals',
     description: 'Handcrafted leather sandals from Maharashtra.',
-    imageUrl: 'https://i.pinimg.com/564x/b8/9f/c6/b89fc665f80931561b373f15a1a10839.jpg',
+    imageUrl: 'https://picsum.photos/seed/chappals/564/564',
     imageHint: 'leather sandals',
     price: 1800,
     category: 'Footwear',
@@ -130,13 +130,12 @@ export default function MyProductsPage() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         {products.map((product) => (
           <Card key={product.name} className="overflow-hidden">
-            <div className="w-full aspect-video flex items-center justify-center bg-muted">
+            <div className="relative w-full aspect-square">
               <Image
                 src={product.imageUrl}
                 alt={product.description}
-                width={564}
-                height={564}
-                className="object-contain h-full w-auto"
+                fill
+                className="object-cover"
                 data-ai-hint={product.imageHint}
               />
             </div>
