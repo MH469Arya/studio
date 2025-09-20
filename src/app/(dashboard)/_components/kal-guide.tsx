@@ -75,14 +75,14 @@ export function KalGuide() {
             KalGuide
           </DialogTitle>
           <DialogDescription>
-            Your personal AI-powered guide to the platform.
+            Your personal AI-powered guide to the platform. Tell me what you need help with.
           </DialogDescription>
         </DialogHeader>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 py-4">
             {/* Left side: Form */}
             <div>
                  <h3 className="font-semibold mb-2">Your Context</h3>
-                 <p className="text-sm text-muted-foreground mb-4">This data is automatically collected to personalize your guide.</p>
+                 <p className="text-sm text-muted-foreground mb-4">This data can be automatically collected to personalize your guide. For this demo, you can edit it.</p>
                 <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                     <FormField
@@ -103,7 +103,7 @@ export function KalGuide() {
                     name="supportNeed"
                     render={({ field }) => (
                         <FormItem>
-                        <FormLabel className="text-xs">Support Need</FormLabel>
+                        <FormLabel className="text-xs">What do you need help with?</FormLabel>
                         <FormControl>
                             <Textarea {...field} rows={4} className="text-xs" />
                         </FormControl>
@@ -112,8 +112,14 @@ export function KalGuide() {
                     )}
                     />
                     <Button type="submit" disabled={isLoading} className="w-full">
-                    {isLoading ? <Loader2 className="animate-spin" /> : <Wand2 />}
-                    Generate My Guide
+                      {isLoading ? (
+                        <Loader2 className="animate-spin" />
+                      ) : (
+                        <>
+                          <Wand2 className="mr-2" />
+                          Generate My Guide
+                        </>
+                      )}
                     </Button>
                 </form>
                 </Form>
@@ -122,16 +128,19 @@ export function KalGuide() {
             <ScrollArea className="h-96 pr-4">
                  <div className="space-y-6">
                     <div>
-                    <h3 className="font-semibold mb-2 flex items-center"><Navigation className="w-4 h-4 mr-2"/> Interactive Tour</h3>
+                    <h3 className="font-semibold mb-2 flex items-center"><Navigation className="w-4 h-4 mr-2 text-primary"/> Interactive Tour</h3>
                     {isLoading ? (
                         <div className="space-y-3">
-                            {[...Array(3)].map((_, i) => <div key={i} className="h-8 bg-muted rounded animate-pulse w-full"></div>)}
+                            {[...Array(4)].map((_, i) => <div key={i} className="flex items-start space-x-3">
+                                <div className="h-6 w-6 bg-muted rounded-full animate-pulse"></div>
+                                <div className="h-4 bg-muted rounded animate-pulse w-5/6 mt-1"></div>
+                            </div>)}
                         </div>
                     ) : tour?.tourSteps ? (
-                        <ol className="space-y-2 list-inside">
+                        <ol className="space-y-3">
                             {tour.tourSteps.map((step, index) => (
                                 <li key={index} className="flex items-start">
-                                <Badge variant="outline" className="mr-3 mt-1">{index+1}</Badge>
+                                <Badge variant="outline" className="mr-3 mt-1 flex-shrink-0 h-6 w-6 flex items-center justify-center">{index+1}</Badge>
                                 <span className="text-sm">{step}</span>
                                 </li>
                             ))}
@@ -139,10 +148,13 @@ export function KalGuide() {
                     ) : <p className="text-sm text-muted-foreground text-center py-10">Generate a guide to see your personalized tour.</p>}
                     </div>
                     <div>
-                    <h3 className="font-semibold mb-2 flex items-center"><HelpCircle className="w-4 h-4 mr-2"/> Additional Tips</h3>
-                    {isLoading ? (
-                        <div className="space-y-3">
-                            {[...Array(2)].map((_, i) => <div key={i} className="h-8 bg-muted rounded animate-pulse w-full"></div>)}
+                    <h3 className="font-semibold mb-2 flex items-center"><HelpCircle className="w-4 h-4 mr-2 text-primary"/> Additional Tips</h3>
+                    {isLoading && !tour ? (
+                         <div className="space-y-3">
+                           {[...Array(2)].map((_, i) => <div key={i} className="flex items-start space-x-3">
+                                <div className="h-4 w-4 bg-muted rounded-full animate-pulse mt-1"></div>
+                                <div className="h-4 bg-muted rounded animate-pulse w-4/6 mt-1"></div>
+                            </div>)}
                         </div>
                     ) : tour?.additionalTips ? (
                         <ul className="space-y-2 list-inside list-disc">
