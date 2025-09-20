@@ -12,7 +12,7 @@ export function Header() {
             <img
               src="/assets/iconcm.svg"
               alt="KalConnect Logo"
-              style={{ height: '32px', width: '32px', marginRight: '8px' }}
+              style={{ height: '40px', width: '40px', marginRight: '8px' }}
             />
            <span className="font-bold text-xl font-headline">
             KalConnect
