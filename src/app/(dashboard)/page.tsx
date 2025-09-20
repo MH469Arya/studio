@@ -36,6 +36,7 @@ export default function DashboardPage() {
       <div className="relative w-full h-64 md:h-96 rounded-lg overflow-hidden border shadow-sm">
         <video
           src="/artisan-video.mp4"
+          poster="https://picsum.photos/seed/kalconnect1/1200/800"
           autoPlay
           loop
           muted
