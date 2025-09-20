@@ -24,7 +24,7 @@ export default function DashboardLayout({
           <SidebarHeader>
             <Link href="/" className="flex items-center gap-2">
               <img
-                src="PASTE_YOUR_IMAGE_ADDRESS_HERE"
+                src="/assets/iconcm.svg"
                 alt="KalConnect Logo"
                 style={{ height: '32px', width: '32px', marginRight: '8px' }}
               />
