@@ -39,11 +39,12 @@ export default function DashboardPage() {
           autoPlay
           loop
           muted
-          className="absolute w-auto min-w-full min-h-full max-w-none top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10" />
-        <div className="absolute bottom-0 left-0 p-6 md:p-8 z-10">
-          <h1 className="text-3xl md:text-5xl font-headline font-bold text-white shadow-2xl">
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+        <div className="absolute bottom-0 left-0 p-6 md:p-8 text-white">
+          <h1 className="text-3xl md:text-5xl font-headline font-bold shadow-2xl">
             Welcome to KalConnect
           </h1>
           <p className="mt-2 max-w-lg text-lg text-neutral-200">
