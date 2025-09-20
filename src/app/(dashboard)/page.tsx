@@ -40,16 +40,17 @@ export default function DashboardPage() {
           loop
           muted
           playsInline
-          className="absolute inset-0 w-full h-full object-cover z-10"
+          className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-20" />
-        <div className="absolute bottom-0 left-0 p-6 md:p-8 text-white z-30">
-          <h1 className="text-3xl md:text-5xl font-headline font-bold shadow-2xl">
-            Welcome to KalConnect
-          </h1>
-          <p className="mt-2 max-w-lg text-lg text-neutral-200">
-            Empowering artisans, connecting cultures. Here are your tools for success.
-          </p>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end">
+          <div className="p-6 md:p-8 text-white">
+            <h1 className="text-3xl md:text-5xl font-headline font-bold shadow-2xl">
+              Welcome to KalConnect
+            </h1>
+            <p className="mt-2 max-w-lg text-lg text-neutral-200">
+              Empowering artisans, connecting cultures. Here are your tools for success.
+            </p>
+          </div>
         </div>
       </div>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
