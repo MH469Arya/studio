@@ -33,7 +33,7 @@ export default function DashboardPage() {
 
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
-      <div className="relative w-full h-64 md:h-96 rounded-lg overflow-hidden border shadow-sm flex flex-col justify-end p-6 md:p-8 text-white bg-black">
+      <div className="relative w-full h-64 md:h-96 rounded-lg overflow-hidden border shadow-sm flex flex-col justify-end p-6 md:p-8 text-white">
         <video
           src="/artisan-video.mp4"
           autoPlay
@@ -42,8 +42,7 @@ export default function DashboardPage() {
           playsInline
           className="absolute top-0 left-0 w-full h-full object-cover -z-10"
         />
-        <div className="bg-gradient-to-t from-black/60 to-transparent absolute inset-0 -z-10"></div>
-        <div>
+        <div className="relative z-10 bg-black/40 p-6 rounded-lg">
           <h1 className="text-3xl md:text-5xl font-headline font-bold shadow-2xl">
             Welcome to KalConnect
           </h1>
