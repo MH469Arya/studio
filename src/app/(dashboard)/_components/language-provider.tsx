@@ -33,7 +33,7 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   };
 
   const t = useCallback((text: string): string => {
-    if (locale === 'en') {
+    if (locale === 'en' || !text) {
       return text;
     }
     return translations[text] || text;
@@ -45,16 +45,10 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
     try {
         const uniqueTexts = Array.from(new Set(textsToTranslate));
-        const newTranslations: Record<string, string> = {};
-        
-        await Promise.all(uniqueTexts.map(async (text) => {
-            const result = await translateText({ text });
-            if (result.translation) {
-                newTranslations[text] = result.translation;
-            }
-        }));
-
-        setTranslations(prev => ({ ...prev, ...newTranslations }));
+        const result = await translateText({ texts: uniqueTexts });
+        if (result.translations) {
+            setTranslations(prev => ({ ...prev, ...result.translations }));
+        }
 
     } catch (error) {
       console.error('Translation error:', error);
