@@ -1,7 +1,6 @@
 'use client';
 
 import Image from 'next/image';
-import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -16,7 +15,7 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { PlusCircle, Pencil, Wand2, Lightbulb } from 'lucide-react';
+import { PlusCircle, Pencil, Wand2, Lightbulb, Loader2 } from 'lucide-react';
 import {
   Card,
   CardContent,
@@ -25,6 +24,10 @@ import {
 } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
+import Link from 'next/link';
+import { suggestProductPrice } from '@/ai/flows/suggest-product-price';
+import { useToast } from '@/hooks/use-toast';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 type Product = {
   name: string;
@@ -57,27 +60,34 @@ const initialProducts: Product[] = [
   },
 ];
 
-// We'll use a simple in-memory store for the description for this example.
-// In a real app, you might use localStorage, sessionStorage, or a state management library.
-let descriptionFromAI = '';
-
 export default function MyProductsPage() {
   const [products, setProducts] = useState(initialProducts);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  
+  // State for the "Add Product" form
+  const [newProductName, setNewProductName] = useState('');
   const [newProductDescription, setNewProductDescription] = useState('');
+  const [newProductCategory, setNewProductCategory] = useState('');
+  const [newProductPrice, setNewProductPrice] = useState('');
 
+  const [isSuggestingPrice, setIsSuggestingPrice] = useState(false);
+  const [priceSuggestion, setPriceSuggestion] = useState<{ price: number, justification: string } | null>(null);
+
+  const { toast } = useToast();
   const searchParams = useSearchParams();
   const router = useRouter();
 
   useEffect(() => {
-    const fromAI = searchParams.get('fromAI');
-    if (fromAI === 'true' && descriptionFromAI) {
-      setNewProductDescription(descriptionFromAI);
+    // @ts-ignore
+    const descFromAI = window.descriptionFromAI;
+    if (searchParams.get('fromAI') === 'true' && descFromAI) {
+      setNewProductDescription(descFromAI);
       setIsAddDialogOpen(true);
-      // Clean up the in-memory store and URL
-      descriptionFromAI = ''; 
+      // Clean up the temporary store and URL
+      // @ts-ignore
+      delete window.descriptionFromAI; 
       router.replace('/my-products');
     }
   }, [searchParams, router]);
@@ -96,8 +106,7 @@ export default function MyProductsPage() {
       stock: Number(formData.get('stock')),
     };
     setProducts([...products, newProduct]);
-    setIsAddDialogOpen(false);
-    setNewProductDescription('');
+    handleOpenAddDialog(false);
     event.currentTarget.reset();
   };
 
@@ -127,11 +136,46 @@ export default function MyProductsPage() {
   };
 
   const handleOpenAddDialog = (isOpen: boolean) => {
-    if (!isOpen) {
-      setNewProductDescription('');
-    }
     setIsAddDialogOpen(isOpen);
+    if (!isOpen) {
+      // Reset form state when closing
+      setNewProductName('');
+      setNewProductDescription('');
+      setNewProductCategory('');
+      setNewProductPrice('');
+      setPriceSuggestion(null);
+    }
   }
+
+  const handleSuggestPrice = async () => {
+    if (!newProductName || !newProductDescription || !newProductCategory) {
+      toast({
+        title: "Missing Information",
+        description: "Please fill out the Product Name, Description, and Category before suggesting a price.",
+        variant: "destructive",
+      });
+      return;
+    }
+    setIsSuggestingPrice(true);
+    setPriceSuggestion(null);
+    try {
+      const result = await suggestProductPrice({
+        productName: newProductName,
+        description: newProductDescription,
+        category: newProductCategory,
+      });
+      setPriceSuggestion({ price: result.suggestedPrice, justification: result.justification });
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: 'Error Suggesting Price',
+        description: 'An unexpected error occurred. Please try again.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsSuggestingPrice(false);
+    }
+  };
 
 
   return (
@@ -157,7 +201,13 @@ export default function MyProductsPage() {
                   <Label htmlFor="name" className="text-right">
                     Product Name
                   </Label>
-                  <Input id="name" name="name" className="col-span-3" required />
+                  <Input id="name" name="name" className="col-span-3" required value={newProductName} onChange={e => setNewProductName(e.target.value)} />
+                </div>
+                 <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="category" className="text-right">
+                    Category
+                  </Label>
+                  <Input id="category" name="category" className="col-span-3" required value={newProductCategory} onChange={e => setNewProductCategory(e.target.value)} />
                 </div>
                 <div className="grid grid-cols-4 items-start gap-4">
                    <Label htmlFor="description" className="text-right pt-2">
@@ -170,9 +220,10 @@ export default function MyProductsPage() {
                       required 
                       value={newProductDescription}
                       onChange={(e) => setNewProductDescription(e.target.value)}
+                      rows={4}
                     />
                     <Button variant="outline" size="sm" asChild>
-                        <Link href="/products" target="_blank">
+                        <Link href={{ pathname: '/products', query: { productName: newProductName, category: newProductCategory } }} target="_blank">
                            <Wand2 className="mr-2 h-3 w-3"/> Generate with AI
                         </Link>
                     </Button>
@@ -189,19 +240,22 @@ export default function MyProductsPage() {
                     Price
                   </Label>
                    <div className="col-span-3 grid gap-2">
-                    <Input id="price" name="price" type="number" required />
-                     <Button variant="outline" size="sm" asChild>
-                        <Link href="/sales" target="_blank">
-                           <Lightbulb className="mr-2 h-3 w-3"/> Suggest Price
-                        </Link>
+                    <Input id="price" name="price" type="number" required value={newProductPrice} onChange={e => setNewProductPrice(e.target.value)} />
+                     <Button variant="outline" size="sm" type="button" onClick={handleSuggestPrice} disabled={isSuggestingPrice}>
+                        {isSuggestingPrice ? <Loader2 className="animate-spin" /> : <Lightbulb className="mr-2 h-3 w-3"/>}
+                        Suggest Price
                     </Button>
+                    {priceSuggestion && (
+                       <Alert>
+                         <Lightbulb className="h-4 w-4" />
+                         <AlertTitle>Price Suggestion: ₹{priceSuggestion.price}</AlertTitle>
+                         <AlertDescription>
+                           {priceSuggestion.justification}
+                           <Button variant="link" size="sm" className="p-0 h-auto ml-1" onClick={() => setNewProductPrice(priceSuggestion.price.toString())}>Apply</Button>
+                         </AlertDescription>
+                       </Alert>
+                    )}
                   </div>
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="category" className="text-right">
-                    Category
-                  </Label>
-                  <Input id="category" name="category" className="col-span-3" required />
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label htmlFor="stock" className="text-right">

@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Wand2, Loader2, Send } from 'lucide-react';
@@ -28,16 +28,28 @@ export function ProductDescriptionForm() {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      productName: 'Ganjifa Cards',
+      productName: '',
       craftsmanshipDetails: 'Hand-painted on circular or rectangular pieces of cloth or paper, featuring intricate details and natural colors.',
       culturalSignificance: 'A traditional playing card game from medieval India, often depicting stories from Hindu mythology like the Ramayana and Mahabharata.',
       targetAudience: 'Art collectors, history enthusiasts, and people looking for unique, cultural gift items.',
     },
   });
+
+  useEffect(() => {
+    const productName = searchParams.get('productName');
+    const category = searchParams.get('category');
+    if (productName) {
+      form.setValue('productName', productName);
+    }
+    if (category) {
+      form.setValue('targetAudience', `People interested in ${category}`);
+    }
+  }, [searchParams, form]);
 
   const onSubmit = async (values: FormValues) => {
     setIsLoading(true);
@@ -64,10 +76,6 @@ export function ProductDescriptionForm() {
     // @ts-ignore
     window.descriptionFromAI = description;
     router.push('/my-products?fromAI=true');
-    toast({
-        title: 'Description Added!',
-        description: 'Redirecting you back to your product...',
-    });
   };
 
   return (
@@ -158,7 +166,7 @@ export function ProductDescriptionForm() {
                 </div>
             ) : description ? (
                 <div className="relative space-y-4">
-                    <Textarea value={description} readOnly rows={12} className="bg-background" />
+                    <Textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={12} className="bg-background" />
                     <Button
                         className="w-full"
                         onClick={handleAddDescription}
