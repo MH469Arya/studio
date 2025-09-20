@@ -1,0 +1,64 @@
+'use server';
+
+/**
+ * @fileOverview Provides AI-driven sales insights and suggests optimal pricing strategies for artisans.
+ *
+ * - getSalesInsights - A function that generates sales insights.
+ * - GetSalesInsightsInput - The input type for the getSalesInsights function.
+ * - GetSalesInsightsOutput - The return type for the getSalesInsights function.
+ */
+
+import {ai} from '@/ai/genkit';
+import {z} from 'genkit';
+
+const GetSalesInsightsInputSchema = z.object({
+  productName: z.string().describe('The name of the product.'),
+  artisanId: z.string().describe('The ID of the artisan.'),
+  currentPrice: z.number().describe('The current price of the product.'),
+  averageOrderValue: z.number().describe('The current average order value for the product.'),
+  regionalDemand: z.string().describe('Information about the regional demand for the product.'),
+  newItemVolume: z.number().describe('The number of new items created within a defined period.'),
+  itemsSoldVolume: z.number().describe('The number of items sold within the same defined period.'),
+});
+export type GetSalesInsightsInput = z.infer<typeof GetSalesInsightsInputSchema>;
+
+const GetSalesInsightsOutputSchema = z.object({
+  insights: z.string().describe('Sales insights and optimal pricing strategies for the product.'),
+});
+export type GetSalesInsightsOutput = z.infer<typeof GetSalesInsightsOutputSchema>;
+
+export async function getSalesInsights(input: GetSalesInsightsInput): Promise<GetSalesInsightsOutput> {
+  return getSalesInsightsFlow(input);
+}
+
+const prompt = ai.definePrompt({
+  name: 'getSalesInsightsPrompt',
+  input: {schema: GetSalesInsightsInputSchema},
+  output: {schema: GetSalesInsightsOutputSchema},
+  prompt: `You are an AI-powered sales analysis tool for artisans.
+
+  Based on the following information, provide sales insights and suggest optimal pricing strategies for the product.
+
+  Product Name: {{{productName}}}
+  Artisan ID: {{{artisanId}}}
+  Current Price: {{{currentPrice}}}
+  Average Order Value: {{{averageOrderValue}}}
+  Regional Demand: {{{regionalDemand}}}
+  New Item Volume: {{{newItemVolume}}}
+  Items Sold Volume: {{{itemsSoldVolume}}}
+
+  Analyze this data and provide actionable insights to help the artisan make better decisions and increase sales.  If the volume of new items created exceeds the number of items sold, highlight this and suggest strategies to address the imbalance.
+`,
+});
+
+const getSalesInsightsFlow = ai.defineFlow(
+  {
+    name: 'getSalesInsightsFlow',
+    inputSchema: GetSalesInsightsInputSchema,
+    outputSchema: GetSalesInsightsOutputSchema,
+  },
+  async input => {
+    const {output} = await prompt(input);
+    return output!;
+  }
+);

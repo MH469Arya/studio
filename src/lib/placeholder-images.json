@@ -1,3 +1,28 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "kalconnect-hero-1",
+      "description": "A close-up of an artisan weaving a colorful textile.",
+      "imageUrl": "https://picsum.photos/seed/kalconnect1/1200/800",
+      "imageHint": "artisan weaving"
+    },
+    {
+      "id": "kalconnect-card-1",
+      "description": "Pottery being shaped on a wheel.",
+      "imageUrl": "https://picsum.photos/seed/kalconnect2/400/300",
+      "imageHint": "pottery wheel"
+    },
+    {
+      "id": "kalconnect-card-2",
+      "description": "An assortment of handmade jewelry on a wooden table.",
+      "imageUrl": "https://picsum.photos/seed/kalconnect3/400/300",
+      "imageHint": "handmade jewelry"
+    },
+    {
+      "id": "kalconnect-card-3",
+      "description": "Colorful hand-painted ceramics.",
+      "imageUrl": "https://picsum.photos/seed/kalconnect4/400/300",
+      "imageHint": "painted ceramics"
+    }
+  ]
 }
