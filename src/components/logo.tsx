@@ -13,9 +13,9 @@ export function Logo(props: SVGProps<SVGSVGElement>) {
       {...props}
     >
       <title>KalConnect Logo</title>
-      <path d="M10 5.57217C10.5939 4.61311 11.7029 4 13 4C14.6569 4 16 5.34315 16 7C16 8.65685 14.6569 10 13 10H10V5.57217Z" stroke="hsl(var(--primary))" strokeWidth="2.5" />
-      <path d="M10 10L16 20" stroke="hsl(var(--primary))" strokeWidth="2.5" />
-      <path d="M10 5V20" stroke="hsl(var(--foreground))" strokeWidth="2" />
+      <path d="M12 2a5 5 0 0 0-5 5v10a5 5 0 0 0 5 5" stroke="hsl(var(--foreground))" strokeWidth="2" />
+      <path d="M12 7h2a3 3 0 0 1 3 3 3 3 0 0 1-3 3h-2" stroke="hsl(var(--primary))" strokeWidth="2.5" />
+      <path d="M12 12l5 5" stroke="hsl(var(--primary))" strokeWidth="2.5" />
     </svg>
   );
 }
