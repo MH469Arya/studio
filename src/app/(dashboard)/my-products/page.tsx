@@ -134,9 +134,8 @@ export default function MyProductsPage() {
               <Image
                 src={product.imageUrl}
                 alt={product.description}
-                width={400}
-                height={300}
-                className="object-cover w-full h-full"
+                fill
+                className="object-cover"
                 data-ai-hint={product.imageHint}
               />
             </div>
