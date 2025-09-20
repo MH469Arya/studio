@@ -27,14 +27,14 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 
 const mockOrders = [
-    { id: 'ORD001', customer: 'Ravi Kumar', date: '2023-11-23', status: 'Fulfilled', total: '₹2,500.00' },
-    { id: 'ORD002', customer: 'Priya Sharma', date: '2023-11-20', status: 'Shipped', total: '₹1,200.50' },
-    { id: 'ORD003', customer: 'Amit Patel', date: '2023-11-22', status: 'Processing', total: '₹800.00' },
-    { id: 'ORD004', customer: 'Sunita Devi', date: '2023-11-21', status: 'Fulfilled', total: '₹3,100.75' },
-    { id: 'ORD005', customer: 'Vikram Singh', date: '2023-11-24', status: 'Pending', total: '₹500.00' },
-    { id: 'ORD006', customer: 'Anjali Gupta', date: '2023-11-19', status: 'Cancelled', total: '₹950.00' },
-    { id: 'ORD007', customer: 'Deepak Verma', date: '2023-11-25', status: 'Processing', total: '₹1,500.00' },
-    { id: 'ORD008', customer: 'Meera Iyer', date: '2023-11-18', status: 'Fulfilled', total: '₹4,200.00' },
+    { id: 'ORD001', customer: 'Ravi Kumar', product: 'Ganjifa Cards', date: '2023-11-23', status: 'Fulfilled', total: '₹2,500.00' },
+    { id: 'ORD002', customer: 'Priya Sharma', product: 'Kolhapuri Chappals', date: '2023-11-20', status: 'Shipped', total: '₹1,200.50' },
+    { id: 'ORD003', customer: 'Amit Patel', product: 'Ganjifa Cards', date: '2023-11-22', status: 'Processing', total: '₹800.00' },
+    { id: 'ORD004', customer: 'Sunita Devi', product: 'Kolhapuri Chappals', date: '2023-11-21', status: 'Fulfilled', total: '₹3,100.75' },
+    { id: 'ORD005', customer: 'Vikram Singh', product: 'Ganjifa Cards', date: '2023-11-24', status: 'Pending', total: '₹500.00' },
+    { id: 'ORD006', customer: 'Anjali Gupta', product: 'Kolhapuri Chappals', date: '2023-11-19', status: 'Cancelled', total: '₹950.00' },
+    { id: 'ORD007', customer: 'Deepak Verma', product: 'Ganjifa Cards', date: '2023-11-25', status: 'Processing', total: '₹1,500.00' },
+    { id: 'ORD008', customer: 'Meera Iyer', product: 'Kolhapuri Chappals', date: '2023-11-18', status: 'Fulfilled', total: '₹4,200.00' },
 ];
 
 const getStatusVariant = (status: string) => {
@@ -102,6 +102,7 @@ export function OrdersTable() {
               <TableRow>
                 <TableHead>Order ID</TableHead>
                 <TableHead>Customer</TableHead>
+                <TableHead>Product</TableHead>
                 <TableHead>Date</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead className="text-right">Total</TableHead>
@@ -116,6 +117,7 @@ export function OrdersTable() {
                   <TableRow key={order.id}>
                     <TableCell className="font-medium">{order.id}</TableCell>
                     <TableCell>{order.customer}</TableCell>
+                    <TableCell>{order.product}</TableCell>
                     <TableCell>{order.date}</TableCell>
                     <TableCell>
                       <Badge variant={getStatusVariant(order.status)}>{order.status}</Badge>
@@ -140,7 +142,7 @@ export function OrdersTable() {
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={6} className="h-24 text-center">
+                  <TableCell colSpan={7} className="h-24 text-center">
                     No orders found.
                   </TableCell>
                 </TableRow>
