@@ -16,7 +16,9 @@ const TranslateTextInputSchema = z.object({
 export type TranslateTextInput = z.infer<typeof TranslateTextInputSchema>;
 
 const TranslateTextOutputSchema = z.object({
-  translations: z.record(z.string()).describe('A map of English text to its Hindi translation.'),
+  translations: z
+    .record(z.string(), z.string())
+    .describe('A map of English text to its Hindi translation.'),
 });
 export type TranslateTextOutput = z.infer<typeof TranslateTextOutputSchema>;
 
