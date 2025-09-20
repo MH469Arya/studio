@@ -130,12 +130,13 @@ export default function MyProductsPage() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         {products.map((product) => (
           <Card key={product.name} className="overflow-hidden">
-            <div className="relative aspect-video w-full">
+            <div className="w-full aspect-video flex items-center justify-center bg-muted">
               <Image
                 src={product.imageUrl}
                 alt={product.description}
-                fill
-                className="object-cover"
+                width={564}
+                height={564}
+                className="object-contain h-full w-auto"
                 data-ai-hint={product.imageHint}
               />
             </div>
