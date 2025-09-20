@@ -9,6 +9,7 @@ import {
   LineChart,
   Megaphone,
   Package,
+  ShoppingBag,
   Sparkles,
   ScrollText,
 } from 'lucide-react';
@@ -33,6 +34,11 @@ const menuItems = [
     href: '/orders',
     label: 'Orders',
     icon: Package,
+  },
+  {
+    href: '/my-products',
+    label: 'My Products',
+    icon: ShoppingBag,
   },
   {
     label: 'AI Tools',
