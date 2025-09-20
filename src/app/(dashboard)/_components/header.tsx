@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { UserNav } from './user-nav';
 import { KalGuide } from './kal-guide';
@@ -8,8 +9,11 @@ export function Header() {
     <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background/80 px-4 backdrop-blur-sm md:px-6">
       <div className="flex items-center gap-2">
         <SidebarTrigger className="md:hidden" />
-        <Link href="/" className="hidden font-bold md:block text-xl font-headline">
-          KalConnect
+        <Link href="/" className="flex items-center gap-2 md:hidden">
+          <Image src="/iconcm.png" alt="KalConnect Logo" width={28} height={28} className="h-7 w-7" />
+           <span className="font-bold text-xl font-headline">
+            KalConnect
+          </span>
         </Link>
       </div>
 
