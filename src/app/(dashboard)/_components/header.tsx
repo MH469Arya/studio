@@ -9,6 +9,11 @@ export function Header() {
       <div className="flex items-center gap-2">
         <SidebarTrigger className="md:hidden" />
         <Link href="/" className="flex items-center gap-2 md:hidden">
+            <img
+              src="PASTE_YOUR_IMAGE_ADDRESS_HERE"
+              alt="KalConnect Logo"
+              style={{ height: '32px', width: '32px', marginRight: '8px' }}
+            />
            <span className="font-bold text-xl font-headline">
             KalConnect
           </span>
