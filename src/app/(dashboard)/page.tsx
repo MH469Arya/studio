@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowUpRight, Package, LineChart, ScrollText } from 'lucide-react';
 import {
@@ -9,13 +8,8 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 export default function DashboardPage() {
-  const heroImage = PlaceHolderImages.find(
-    (img) => img.id === 'kalconnect-hero-1'
-  );
-  
   const featureCards = [
     {
       title: 'Manage Orders',
@@ -40,15 +34,13 @@ export default function DashboardPage() {
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
       <div className="relative w-full h-64 md:h-96 rounded-lg overflow-hidden border shadow-sm">
-        {heroImage && (
-          <Image
-            src={heroImage.imageUrl}
-            alt={heroImage.description}
-            fill
-            className="object-cover"
-            data-ai-hint={heroImage.imageHint}
+        <video
+            src="/artisan-video.mp4"
+            autoPlay
+            loop
+            muted
+            className="absolute top-0 left-0 w-full h-full object-cover"
           />
-        )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
         <div className="absolute bottom-0 left-0 p-6 md:p-8">
           <h1 className="text-3xl md:text-5xl font-headline font-bold text-white shadow-2xl">
