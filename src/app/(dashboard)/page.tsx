@@ -35,15 +35,17 @@ export default function DashboardPage() {
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
       <div className="relative w-full h-64 md:h-96 rounded-lg overflow-hidden border shadow-sm">
         <video
-          src="/artisan-video.mp4"
           poster="https://picsum.photos/seed/kalconnect1/1200/800"
           autoPlay
           loop
           muted
           playsInline
           className="absolute top-0 left-0 w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+        >
+          <source src="/artisan-video.mp4" type="video/mp4" />
+          <source src="/artisan-video.webm" type="video/webm" />
+          Your browser does not support the video tag.
+        </video>
         <div className="relative z-10 flex flex-col justify-end h-full p-6 md:p-8 text-white">
           <div className="bg-black/40 p-6 rounded-lg">
             <h1 className="text-3xl md:text-5xl font-headline font-bold shadow-2xl">
