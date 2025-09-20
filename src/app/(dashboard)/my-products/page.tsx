@@ -129,6 +129,14 @@ export default function MyProductsPage() {
     setIsEditDialogOpen(false);
     setEditingProduct(null);
   };
+  
+  const handleRemoveProduct = () => {
+    if (!editingProduct) return;
+
+    setProducts(products.filter(p => p.name !== editingProduct.name));
+    setIsEditDialogOpen(false);
+    setEditingProduct(null);
+  };
 
   const openEditDialog = (product: Product) => {
     setEditingProduct(product);
@@ -356,6 +364,9 @@ export default function MyProductsPage() {
                 </div>
               </div>
               <DialogFooter>
+                <Button variant="destructive" type="button" onClick={handleRemoveProduct}>
+                  Remove Product
+                </Button>
                 <Button type="submit">Save Changes</Button>
               </DialogFooter>
             </form>
