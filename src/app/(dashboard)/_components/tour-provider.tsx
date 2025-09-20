@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, useCallback } from 'react';
+import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import Joyride, { Step, CallBackProps } from 'react-joyride';
 
 interface TourContextType {
@@ -54,6 +54,11 @@ const tourSteps: Step[] = [
 
 export const TourProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [run, setRun] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const startTour = useCallback(() => {
     setRun(true);
@@ -69,34 +74,36 @@ export const TourProvider: React.FC<{ children: React.ReactNode }> = ({ children
   return (
     <TourContext.Provider value={{ startTour }}>
       {children}
-      <Joyride
-        steps={tourSteps}
-        run={run}
-        callback={handleJoyrideCallback}
-        continuous
-        showProgress
-        showSkipButton
-        styles={{
-          options: {
-            zIndex: 10000,
-            primaryColor: '#D4A24E',
-            arrowColor: '#F5F5DC',
-            backgroundColor: '#F5F5DC',
-            textColor: '#333'
-          },
-          tooltip: {
-            fontFamily: 'Alegreya, serif',
-            borderRadius: 'var(--radius)',
-          },
-          tooltipTitle: {
-            fontFamily: 'Alegreya, serif',
-            fontWeight: 'bold',
-          },
-           buttonClose: {
-            display: 'none',
-          },
-        }}
-      />
+      {isClient && (
+        <Joyride
+          steps={tourSteps}
+          run={run}
+          callback={handleJoyrideCallback}
+          continuous
+          showProgress
+          showSkipButton
+          styles={{
+            options: {
+              zIndex: 10000,
+              primaryColor: '#D4A24E',
+              arrowColor: '#F5F5DC',
+              backgroundColor: '#F5F5DC',
+              textColor: '#333'
+            },
+            tooltip: {
+              fontFamily: 'Alegreya, serif',
+              borderRadius: 'var(--radius)',
+            },
+            tooltipTitle: {
+              fontFamily: 'Alegreya, serif',
+              fontWeight: 'bold',
+            },
+             buttonClose: {
+              display: 'none',
+            },
+          }}
+        />
+      )}
     </TourContext.Provider>
   );
 };
