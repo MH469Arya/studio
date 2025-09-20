@@ -9,7 +9,7 @@ export function Header() {
       <div className="flex items-center gap-2">
         <SidebarTrigger className="md:hidden" />
         <Link href="/" className="flex items-center gap-2 md:hidden">
-          <img src="/iconcm.svg" alt="KalConnect Logo" className="h-7 w-7" />
+          <img src="/iconcm.svg" alt="KalConnect Logo" width="28" height="28" />
            <span className="font-bold text-xl font-headline">
             KalConnect
           </span>
