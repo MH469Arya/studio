@@ -19,7 +19,6 @@ export type SuggestProductPriceInput = z.infer<typeof SuggestProductPriceInputSc
 
 const SuggestProductPriceOutputSchema = z.object({
   suggestedPrice: z.number().describe('The suggested retail price for the product in Indian Rupees (INR).'),
-  justification: z.string().describe('A brief justification for the suggested price, considering the product details and Indian market context.'),
 });
 export type SuggestProductPriceOutput = z.infer<typeof SuggestProductPriceOutputSchema>;
 
@@ -38,7 +37,7 @@ const prompt = ai.definePrompt({
   Description: {{{description}}}
   Category: {{{category}}}
 
-  Based on this information, suggest a retail price in Indian Rupees (INR). Also, provide a short justification for your suggestion, considering factors like perceived value, craftsmanship, materials (if mentioned), category norms, and target audience within India. The price should be a number only.
+  Based on this information, suggest a retail price in Indian Rupees (INR). The price should be a number only.
 `,
 });
 

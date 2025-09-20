@@ -73,7 +73,7 @@ export default function MyProductsPage() {
   const [newProductPrice, setNewProductPrice] = useState('');
 
   const [isSuggestingPrice, setIsSuggestingPrice] = useState(false);
-  const [priceSuggestion, setPriceSuggestion] = useState<{ price: number, justification: string } | null>(null);
+  const [priceSuggestion, setPriceSuggestion] = useState<number | null>(null);
 
   const { toast } = useToast();
   const searchParams = useSearchParams();
@@ -164,7 +164,7 @@ export default function MyProductsPage() {
         description: newProductDescription,
         category: newProductCategory,
       });
-      setPriceSuggestion({ price: result.suggestedPrice, justification: result.justification });
+      setPriceSuggestion(result.suggestedPrice);
     } catch (error) {
       console.error(error);
       toast({
@@ -245,13 +245,12 @@ export default function MyProductsPage() {
                         {isSuggestingPrice ? <Loader2 className="animate-spin" /> : <Lightbulb className="mr-2 h-3 w-3"/>}
                         Suggest Price
                     </Button>
-                    {priceSuggestion && (
+                    {priceSuggestion !== null && (
                        <Alert>
                          <Lightbulb className="h-4 w-4" />
-                         <AlertTitle>Price Suggestion: ₹{priceSuggestion.price}</AlertTitle>
+                         <AlertTitle>Suggested Price: ₹{priceSuggestion}</AlertTitle>
                          <AlertDescription>
-                           {priceSuggestion.justification}
-                           <Button variant="link" size="sm" className="p-0 h-auto ml-1" onClick={() => setNewProductPrice(priceSuggestion.price.toString())}>Apply</Button>
+                           <Button variant="link" size="sm" className="p-0 h-auto" onClick={() => setNewProductPrice(priceSuggestion.toString())}>Apply this price</Button>
                          </AlertDescription>
                        </Alert>
                     )}
