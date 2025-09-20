@@ -35,12 +35,12 @@ export default function DashboardPage() {
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
       <div className="relative w-full h-64 md:h-96 rounded-lg overflow-hidden border shadow-sm">
         <video
-            src="/artisan-video.mp4"
-            autoPlay
-            loop
-            muted
-            className="absolute top-0 left-0 w-full h-full object-cover"
-          />
+          src="/artisan-video.mp4"
+          autoPlay
+          loop
+          muted
+          className="absolute z-[-1] w-auto min-w-full min-h-full max-w-none top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+        />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
         <div className="absolute bottom-0 left-0 p-6 md:p-8">
           <h1 className="text-3xl md:text-5xl font-headline font-bold text-white shadow-2xl">
