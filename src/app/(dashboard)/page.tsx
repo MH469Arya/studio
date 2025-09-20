@@ -8,6 +8,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { VideoHero } from './_components/video-hero';
 
 export default function DashboardPage() {
   const featureCards = [
@@ -33,26 +34,7 @@ export default function DashboardPage() {
 
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
-      <div className="relative w-full h-64 md:h-96 rounded-lg overflow-hidden border shadow-sm">
-        <video
-          src="/artisan-video.mp4"
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end">
-          <div className="p-6 md:p-8 text-white">
-            <h1 className="text-3xl md:text-5xl font-headline font-bold shadow-2xl">
-              Welcome to KalConnect
-            </h1>
-            <p className="mt-2 max-w-lg text-lg text-neutral-200">
-              Empowering artisans, connecting cultures. Here are your tools for success.
-            </p>
-          </div>
-        </div>
-      </div>
+      <VideoHero />
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {featureCards.map((card) => (
           <Card key={card.title} className="hover:shadow-md transition-shadow">
