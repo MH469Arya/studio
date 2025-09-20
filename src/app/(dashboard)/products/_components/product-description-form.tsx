@@ -2,9 +2,10 @@
 
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Copy, Wand2, Loader2 } from 'lucide-react';
+import { Wand2, Loader2, Send } from 'lucide-react';
 import { generateProductDescription } from '@/ai/flows/generate-product-descriptions';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -26,14 +27,15 @@ export function ProductDescriptionForm() {
   const [description, setDescription] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const router = useRouter();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      productName: '',
-      craftsmanshipDetails: '',
-      culturalSignificance: '',
-      targetAudience: '',
+      productName: 'Ganjifa Cards',
+      craftsmanshipDetails: 'Hand-painted on circular or rectangular pieces of cloth or paper, featuring intricate details and natural colors.',
+      culturalSignificance: 'A traditional playing card game from medieval India, often depicting stories from Hindu mythology like the Ramayana and Mahabharata.',
+      targetAudience: 'Art collectors, history enthusiasts, and people looking for unique, cultural gift items.',
     },
   });
 
@@ -55,12 +57,17 @@ export function ProductDescriptionForm() {
     }
   };
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(description);
+  const handleAddDescription = () => {
+    // This is a simplified way to pass state.
+    // In a real app, you might use a shared state management library (like Zustand or Redux),
+    // or pass the data via browser storage (localStorage/sessionStorage).
+    // @ts-ignore
+    window.descriptionFromAI = description;
+    router.push('/my-products?fromAI=true');
     toast({
-        title: 'Copied to clipboard!',
-        description: 'The product description has been copied.',
-    })
+        title: 'Description Added!',
+        description: 'Redirecting you back to your product...',
+    });
   };
 
   return (
@@ -150,15 +157,14 @@ export function ProductDescriptionForm() {
                     <div className="h-4 bg-muted rounded animate-pulse w-4/6"></div>
                 </div>
             ) : description ? (
-                <div className="relative">
-                    <Textarea value={description} readOnly rows={14} className="bg-background" />
+                <div className="relative space-y-4">
+                    <Textarea value={description} readOnly rows={12} className="bg-background" />
                     <Button
-                        variant="ghost"
-                        size="icon"
-                        className="absolute top-2 right-2"
-                        onClick={handleCopy}
+                        className="w-full"
+                        onClick={handleAddDescription}
                     >
-                        <Copy className="h-4 w-4" />
+                        <Send />
+                        Add Description to Product
                     </Button>
                 </div>
             ) : (

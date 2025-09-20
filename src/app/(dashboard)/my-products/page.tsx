@@ -2,7 +2,8 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -23,6 +24,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Textarea } from '@/components/ui/textarea';
 
 type Product = {
   name: string;
@@ -55,11 +57,31 @@ const initialProducts: Product[] = [
   },
 ];
 
+// We'll use a simple in-memory store for the description for this example.
+// In a real app, you might use localStorage, sessionStorage, or a state management library.
+let descriptionFromAI = '';
+
 export default function MyProductsPage() {
   const [products, setProducts] = useState(initialProducts);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [newProductDescription, setNewProductDescription] = useState('');
+
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  useEffect(() => {
+    const fromAI = searchParams.get('fromAI');
+    if (fromAI === 'true' && descriptionFromAI) {
+      setNewProductDescription(descriptionFromAI);
+      setIsAddDialogOpen(true);
+      // Clean up the in-memory store and URL
+      descriptionFromAI = ''; 
+      router.replace('/my-products');
+    }
+  }, [searchParams, router]);
+
 
   const handleAddProduct = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -75,6 +97,7 @@ export default function MyProductsPage() {
     };
     setProducts([...products, newProduct]);
     setIsAddDialogOpen(false);
+    setNewProductDescription('');
     event.currentTarget.reset();
   };
 
@@ -103,12 +126,19 @@ export default function MyProductsPage() {
     setIsEditDialogOpen(true);
   };
 
+  const handleOpenAddDialog = (isOpen: boolean) => {
+    if (!isOpen) {
+      setNewProductDescription('');
+    }
+    setIsAddDialogOpen(isOpen);
+  }
+
 
   return (
     <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
       <div className="flex items-center justify-between space-y-2">
         <h2 className="text-3xl font-bold tracking-tight font-headline">My Products</h2>
-        <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+        <Dialog open={isAddDialogOpen} onOpenChange={handleOpenAddDialog}>
           <DialogTrigger asChild>
             <Button>
               <PlusCircle className="mr-2 h-4 w-4" /> Add New Product
@@ -134,7 +164,13 @@ export default function MyProductsPage() {
                     Description
                   </Label>
                   <div className="col-span-3 grid gap-2">
-                    <Input id="description" name="description" required />
+                    <Textarea 
+                      id="description" 
+                      name="description" 
+                      required 
+                      value={newProductDescription}
+                      onChange={(e) => setNewProductDescription(e.target.value)}
+                    />
                     <Button variant="outline" size="sm" asChild>
                         <Link href="/products" target="_blank">
                            <Wand2 className="mr-2 h-3 w-3"/> Generate with AI
@@ -146,7 +182,7 @@ export default function MyProductsPage() {
                   <Label htmlFor="imageUrl" className="text-right">
                     Image URL
                   </Label>
-                  <Input id="imageUrl" name="imageUrl" className="col-span-3" required />
+                  <Input id="imageUrl" name="imageUrl" defaultValue="https://picsum.photos/seed/newproduct/300/300" className="col-span-3" required />
                 </div>
                 <div className="grid grid-cols-4 items-start gap-4">
                   <Label htmlFor="price" className="text-right pt-2">
@@ -194,14 +230,14 @@ export default function MyProductsPage() {
                 data-ai-hint={product.imageHint}
               />
             </div>
-            <CardHeader className="flex flex-row items-start justify-between">
+            <CardHeader className="flex flex-row items-start justify-between p-4">
               <CardTitle className="font-headline text-lg">{product.name}</CardTitle>
-              <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => openEditDialog(product)}>
+              <Button variant="ghost" size="icon" className="h-8 w-8 -translate-y-1" onClick={() => openEditDialog(product)}>
                 <Pencil className="h-4 w-4"/>
               </Button>
             </CardHeader>
-            <CardContent className="pt-0 grid gap-2">
-              <p className="text-sm text-muted-foreground">{product.description}</p>
+            <CardContent className="pt-0 grid gap-2 px-4 pb-4">
+              <p className="text-sm text-muted-foreground line-clamp-2">{product.description}</p>
               <div className="flex justify-between items-center">
                 <p className="text-lg font-semibold">₹{product.price}</p>
                 <Badge variant="outline">Stock: {product.stock}</Badge>
@@ -239,7 +275,7 @@ export default function MyProductsPage() {
                   <Label htmlFor="edit-description" className="text-right">
                     Description
                   </Label>
-                  <Input id="edit-description" name="description" defaultValue={editingProduct.description} className="col-span-3" required />
+                  <Textarea id="edit-description" name="description" defaultValue={editingProduct.description} className="col-span-3" required />
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label htmlFor="edit-imageUrl" className="text-right">
