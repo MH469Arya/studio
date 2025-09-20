@@ -47,7 +47,7 @@ export function UserNav() {
         <DropdownMenuSeparator />
         <DropdownMenuItem>
             <Globe />
-            English
+            Choose Language
         </DropdownMenuItem>
         <DropdownMenuItem>
           <LifeBuoy />
