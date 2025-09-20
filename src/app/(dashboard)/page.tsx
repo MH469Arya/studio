@@ -37,6 +37,19 @@ export default function DashboardPage() {
     },
   ];
 
+  const products = [
+    {
+      name: 'Ganjifa Cards',
+      description: 'Traditional hand-painted playing cards from Odisha.',
+      image: PlaceHolderImages.find((img) => img.id === 'ganjifa-cards'),
+    },
+    {
+      name: 'Kolhapuri Chappals',
+      description: 'Handcrafted leather sandals from Maharashtra.',
+      image: PlaceHolderImages.find((img) => img.id === 'kolhapuri-chappals'),
+    },
+  ];
+
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
       <div className="relative w-full h-64 md:h-96 rounded-lg overflow-hidden border shadow-sm">
@@ -78,6 +91,34 @@ export default function DashboardPage() {
           </Card>
         ))}
       </div>
+
+      <div>
+        <h2 className="text-2xl font-bold tracking-tight font-headline mb-4">My Products</h2>
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            {products.map((product) => (
+                <Card key={product.name} className="overflow-hidden">
+                    {product.image && (
+                        <div className="relative h-48 w-full">
+                            <Image
+                                src={product.image.imageUrl}
+                                alt={product.image.description}
+                                fill
+                                className="object-cover"
+                                data-ai-hint={product.image.imageHint}
+                            />
+                        </div>
+                    )}
+                    <CardHeader>
+                        <CardTitle className="font-headline text-lg">{product.name}</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <p className="text-sm text-muted-foreground">{product.description}</p>
+                    </CardContent>
+                </Card>
+            ))}
+        </div>
+      </div>
+
     </main>
   );
 }
