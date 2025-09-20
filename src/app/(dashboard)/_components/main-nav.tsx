@@ -64,11 +64,6 @@ const menuItems = [
         label: 'Marketing Coach',
         icon: Megaphone,
       },
-      {
-        href: '/tour',
-        label: 'AI Platform Guide',
-        icon: HelpCircle,
-      },
     ],
   },
 ];
