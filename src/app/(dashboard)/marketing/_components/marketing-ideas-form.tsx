@@ -12,6 +12,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { Input } from '@/components/ui/input';
+import { useLanguage } from '../../_components/language-provider';
 
 const formSchema = z.object({
   eventDetails: z.string().min(10, { message: 'Please provide more event details.' }),
@@ -24,6 +25,7 @@ export function MarketingIdeasForm() {
   const [ideas, setIdeas] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const { t } = useLanguage();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -42,8 +44,8 @@ export function MarketingIdeasForm() {
     } catch (error) {
       console.error(error);
       toast({
-        title: 'Error Generating Ideas',
-        description: 'An unexpected error occurred. Please try again.',
+        title: t('Error Generating Ideas'),
+        description: t('An unexpected error occurred. Please try again.'),
         variant: 'destructive',
       });
     } finally {
@@ -56,8 +58,8 @@ export function MarketingIdeasForm() {
       <div className="lg:col-span-2">
         <Card>
           <CardHeader>
-            <CardTitle className="font-headline">Event & Product Info</CardTitle>
-            <CardDescription>Describe the event and your products to get marketing ideas.</CardDescription>
+            <CardTitle className="font-headline">{t('Event & Product Info')}</CardTitle>
+            <CardDescription>{t('Describe the event and your products to get marketing ideas.')}</CardDescription>
           </CardHeader>
           <CardContent>
             <Form {...form}>
@@ -67,7 +69,7 @@ export function MarketingIdeasForm() {
                   name="eventDetails"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Event Details</FormLabel>
+                      <FormLabel>{t('Event Details')}</FormLabel>
                       <FormControl>
                         <Input placeholder="e.g., Local craft fair, online festival" {...field} />
                       </FormControl>
@@ -80,7 +82,7 @@ export function MarketingIdeasForm() {
                   name="artisanProducts"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Your Products</FormLabel>
+                      <FormLabel>{t('Your Products')}</FormLabel>
                       <FormControl>
                         <Textarea placeholder="e.g., Hand-painted pottery, woven scarves" {...field} />
                       </FormControl>
@@ -90,7 +92,7 @@ export function MarketingIdeasForm() {
                 />
                 <Button type="submit" disabled={isLoading} className="w-full">
                   {isLoading ? <Loader2 className="animate-spin" /> : <Megaphone />}
-                  Get Marketing Ideas
+                  {t('Get Marketing Ideas')}
                 </Button>
               </form>
             </Form>
@@ -100,8 +102,8 @@ export function MarketingIdeasForm() {
       <div className="lg:col-span-3">
         <Card className="min-h-full">
           <CardHeader>
-            <CardTitle className="font-headline">Marketing Ideas</CardTitle>
-            <CardDescription>Your AI-generated marketing ideas will appear below.</CardDescription>
+            <CardTitle className="font-headline">{t('Marketing Ideas')}</CardTitle>
+            <CardDescription>{t('Your AI-generated marketing ideas will appear below.')}</CardDescription>
           </CardHeader>
           <CardContent>
             {isLoading ? (
@@ -118,13 +120,13 @@ export function MarketingIdeasForm() {
                     {ideas.map((idea, index) => (
                         <li key={index} className="flex items-start">
                            <Check className="h-5 w-5 text-primary flex-shrink-0 mt-0.5 mr-3" />
-                           <span className="text-sm">{idea}</span>
+                           <span className="text-sm">{t(idea)}</span>
                         </li>
                     ))}
                 </ul>
             ) : (
                 <div className="flex items-center justify-center h-64 border-2 border-dashed rounded-lg">
-                    <p className="text-muted-foreground">Waiting for event and product info...</p>
+                    <p className="text-muted-foreground">{t('Waiting for event and product info...')}</p>
                 </div>
             )}
           </CardContent>

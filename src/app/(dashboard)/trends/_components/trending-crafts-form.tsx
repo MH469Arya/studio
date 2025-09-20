@@ -11,6 +11,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
+import { useLanguage } from '../../_components/language-provider';
 
 const formSchema = z.object({
   recentSalesData: z.string().min(20, { message: 'Please provide more sales data.' }),
@@ -24,6 +25,7 @@ export function TrendingCraftsForm() {
   const [trends, setTrends] = useState<DiscoverTrendingCraftsOutput | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const { t } = useLanguage();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -43,8 +45,8 @@ export function TrendingCraftsForm() {
     } catch (error) {
       console.error(error);
       toast({
-        title: 'Error Discovering Trends',
-        description: 'An unexpected error occurred. Please try again.',
+        title: t('Error Discovering Trends'),
+        description: t('An unexpected error occurred. Please try again.'),
         variant: 'destructive',
       });
     } finally {
@@ -55,7 +57,7 @@ export function TrendingCraftsForm() {
   const renderInsightCard = (title: string, content: string | undefined) => (
     <Card>
       <CardHeader>
-        <CardTitle className="font-headline text-lg">{title}</CardTitle>
+        <CardTitle className="font-headline text-lg">{t(title)}</CardTitle>
       </CardHeader>
       <CardContent>
         {isLoading ? (
@@ -64,7 +66,7 @@ export function TrendingCraftsForm() {
                 <div className="h-4 bg-muted rounded animate-pulse w-5/6"></div>
             </div>
         ) : (
-            <p className="text-sm text-muted-foreground">{content}</p>
+            <p className="text-sm text-muted-foreground">{content ? t(content) : ''}</p>
         )}
       </CardContent>
     </Card>
@@ -75,8 +77,8 @@ export function TrendingCraftsForm() {
       <div className="lg:col-span-2">
         <Card>
           <CardHeader>
-            <CardTitle className="font-headline">Market Data</CardTitle>
-            <CardDescription>Enter market data to discover trending crafts.</CardDescription>
+            <CardTitle className="font-headline">{t('Market Data')}</CardTitle>
+            <CardDescription>{t('Enter market data to discover trending crafts.')}</CardDescription>
           </CardHeader>
           <CardContent>
             <Form {...form}>
@@ -86,7 +88,7 @@ export function TrendingCraftsForm() {
                   name="recentSalesData"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Recent Sales Data</FormLabel>
+                      <FormLabel>{t('Recent Sales Data')}</FormLabel>
                       <FormControl>
                         <Textarea placeholder="Summarize recent sales..." {...field} rows={4} />
                       </FormControl>
@@ -99,7 +101,7 @@ export function TrendingCraftsForm() {
                   name="consumerFeedback"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Consumer Feedback</FormLabel>
+                      <FormLabel>{t('Consumer Feedback')}</FormLabel>
                       <FormControl>
                         <Textarea placeholder="Summarize customer reviews, feedback..." {...field} rows={4} />
                       </FormControl>
@@ -112,7 +114,7 @@ export function TrendingCraftsForm() {
                   name="demographicData"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Demographic Data</FormLabel>
+                      <FormLabel>{t('Demographic Data')}</FormLabel>
                       <FormControl>
                         <Textarea placeholder="Describe your customer demographics..." {...field} rows={4} />
                       </FormControl>
@@ -122,7 +124,7 @@ export function TrendingCraftsForm() {
                 />
                 <Button type="submit" disabled={isLoading} className="w-full">
                   {isLoading ? <Loader2 className="animate-spin" /> : <Sparkles />}
-                  Discover Trends
+                  {t('Discover Trends')}
                 </Button>
               </form>
             </Form>
@@ -132,8 +134,8 @@ export function TrendingCraftsForm() {
       <div className="lg:col-span-3">
          <Card>
             <CardHeader>
-                <CardTitle className="font-headline">Market Insights</CardTitle>
-                <CardDescription>AI-generated insights on craft market trends.</CardDescription>
+                <CardTitle className="font-headline">{t('Market Insights')}</CardTitle>
+                <CardDescription>{t('AI-generated insights on craft market trends.')}</CardDescription>
             </CardHeader>
             <CardContent className="grid gap-4">
                 {renderInsightCard("Trending Crafts", trends?.trendingCrafts)}

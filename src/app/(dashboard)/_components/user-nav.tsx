@@ -19,7 +19,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useLanguage } from './language-provider';
 
 export function UserNav() {
-  const { locale, setLocale } = useLanguage();
+  const { locale, setLocale, t } = useLanguage();
 
   return (
     <DropdownMenu>
@@ -34,9 +34,9 @@ export function UserNav() {
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">Artisan Kumar</p>
+            <p className="text-sm font-medium leading-none">{t('Artisan Kumar')}</p>
             <p className="text-xs leading-none text-muted-foreground">
-              artisan.kumar@example.com
+              {t('artisan.kumar@example.com')}
             </p>
           </div>
         </DropdownMenuLabel>
@@ -44,40 +44,40 @@ export function UserNav() {
         <DropdownMenuGroup>
           <DropdownMenuItem>
             <User />
-            Profile
+            {t('Profile')}
           </DropdownMenuItem>
           <DropdownMenuItem>
             <Settings />
-            Settings
+            {t('Settings')}
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuSub>
           <DropdownMenuSubTrigger>
             <Globe />
-            Choose Language
+            {t('Choose Language')}
           </DropdownMenuSubTrigger>
           <DropdownMenuPortal>
             <DropdownMenuSubContent>
               <DropdownMenuItem onClick={() => setLocale('en')}>
                 <span className="w-6">{locale === 'en' && <Check />}</span>
-                English
+                {t('English')}
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => setLocale('hi')}>
                  <span className="w-6">{locale === 'hi' && <Check />}</span>
-                Hindi
+                {t('Hindi')}
               </DropdownMenuItem>
             </DropdownMenuSubContent>
           </DropdownMenuPortal>
         </DropdownMenuSub>
         <DropdownMenuItem>
           <LifeBuoy />
-          Support
+          {t('Support')}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
           <LogOut />
-          Log out
+          {t('Log out')}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

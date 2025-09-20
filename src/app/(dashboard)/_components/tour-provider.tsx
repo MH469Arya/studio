@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import Joyride, { Step, CallBackProps } from 'react-joyride';
+import { useLanguage } from './language-provider';
 
 interface TourContextType {
   startTour: () => void;
@@ -17,37 +18,37 @@ export const useTour = () => {
   return context;
 };
 
-const tourSteps: Step[] = [
+const getTourSteps = (t: (text: string) => string): Step[] => [
   {
     target: '#nav-dashboard',
-    content: 'This is your main Dashboard, where you get an overview of your store.',
-    title: 'Dashboard',
+    content: t('This is your main Dashboard, where you get an overview of your store.'),
+    title: t('Dashboard'),
     disableBeacon: true,
   },
   {
     target: '#nav-orders',
-    content: 'Manage all your customer orders from this section.',
-    title: 'Orders',
+    content: t('Manage all your customer orders from this section.'),
+    title: t('Orders'),
   },
   {
     target: '#nav-my-products',
-    content: 'Here you can add, view, and edit all of your product listings.',
-    title: 'My Products',
+    content: t('Here you can add, view, and edit all of your product listings.'),
+    title: t('My Products'),
   },
   {
     target: '#nav-ai-tools',
-    content: 'Explore powerful AI tools to help you with product descriptions, sales insights, and more!',
-    title: 'AI Tools',
+    content: t('Explore powerful AI tools to help you with product descriptions, sales insights, and more!'),
+    title: t('AI Tools'),
   },
   {
     target: '#user-nav-trigger',
-    content: 'Access your profile, settings, and logout from here.',
-    title: 'Your Profile',
+    content: t('Access your profile, settings, and logout from here.'),
+    title: t('Your Profile'),
   },
   {
     target: '#kal-guide-trigger',
-    content: 'You can restart this tour anytime by clicking this button!',
-    title: 'KalGuide',
+    content: t('You can restart this tour anytime by clicking this button!'),
+    title: t('KalGuide'),
   },
 ];
 
@@ -55,6 +56,9 @@ const tourSteps: Step[] = [
 export const TourProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [run, setRun] = useState(false);
   const [isClient, setIsClient] = useState(false);
+  const { t } = useLanguage();
+
+  const tourSteps = getTourSteps(t);
 
   useEffect(() => {
     setIsClient(true);
@@ -91,11 +95,11 @@ export const TourProvider: React.FC<{ children: React.ReactNode }> = ({ children
               textColor: '#333'
             },
             tooltip: {
-              fontFamily: 'Alegreya, serif',
+              fontFamily: 'Poppins, sans-serif',
               borderRadius: 'var(--radius)',
             },
             tooltipTitle: {
-              fontFamily: 'Alegreya, serif',
+              fontFamily: 'Poppins, sans-serif',
               fontWeight: 'bold',
             },
              buttonClose: {

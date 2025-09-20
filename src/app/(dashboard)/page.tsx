@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowUpRight, Package, LineChart, ScrollText } from 'lucide-react';
@@ -9,26 +11,32 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { useLanguage } from './_components/language-provider';
 
 export default function DashboardPage() {
+  const { t } = useLanguage();
+
   const featureCards = [
     {
-      title: 'Manage Orders',
-      description: 'View and process your incoming orders efficiently.',
+      title: t('Manage Orders'),
+      description: t('View and process your incoming orders efficiently.'),
       href: '/orders',
       icon: <Package className="h-6 w-6 text-primary" />,
+      linkText: t('Go to Orders'),
     },
     {
-      title: 'Analyze Sales',
-      description: 'Get AI-powered insights into your sales performance.',
+      title: t('Analyze Sales'),
+      description: t('Get AI-powered insights into your sales performance.'),
       href: '/sales',
       icon: <LineChart className="h-6 w-6 text-primary" />,
+      linkText: t('Go to Sales'),
     },
     {
-      title: 'Create Descriptions',
-      description: 'Generate compelling product descriptions with AI.',
+      title: t('Create Descriptions'),
+      description: t('Generate compelling product descriptions with AI.'),
       href: '/products',
       icon: <ScrollText className="h-6 w-6 text-primary" />,
+      linkText: t('Go to Products'),
     },
   ];
 
@@ -45,10 +53,10 @@ export default function DashboardPage() {
         <div className="relative z-10 flex flex-col justify-end h-full p-6 md:p-8 text-white">
           <div className="bg-black/40 p-6 rounded-lg">
             <h1 className="text-3xl md:text-5xl font-headline font-bold shadow-2xl">
-              Welcome to KalConnect
+              {t('Welcome to KalConnect')}
             </h1>
             <p className="mt-2 max-w-lg text-lg text-neutral-200">
-              Empowering artisans, connecting cultures. Here are your tools for success.
+              {t('Empowering artisans, connecting cultures. Here are your tools for success.')}
             </p>
           </div>
         </div>
@@ -64,7 +72,7 @@ export default function DashboardPage() {
               <CardDescription>{card.description}</CardDescription>
               <Button asChild variant="outline" size="sm" className="mt-4">
                 <Link href={card.href}>
-                  Go to {card.title.split(' ')[1]}
+                  {card.linkText}
                   <ArrowUpRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>

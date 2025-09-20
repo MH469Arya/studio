@@ -13,6 +13,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
+import { useLanguage } from '../../_components/language-provider';
 
 const formSchema = z.object({
   productName: z.string().min(2, { message: 'Product name must be at least 2 characters.' }),
@@ -29,6 +30,7 @@ export function ProductDescriptionForm() {
   const { toast } = useToast();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { t } = useLanguage();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -60,8 +62,8 @@ export function ProductDescriptionForm() {
     } catch (error) {
       console.error(error);
       toast({
-        title: 'Error Generating Description',
-        description: 'An unexpected error occurred. Please try again.',
+        title: t('Error Generating Description'),
+        description: t('An unexpected error occurred. Please try again.'),
         variant: 'destructive',
       });
     } finally {
@@ -70,9 +72,6 @@ export function ProductDescriptionForm() {
   };
 
   const handleAddDescription = () => {
-    // This is a simplified way to pass state.
-    // In a real app, you might use a shared state management library (like Zustand or Redux),
-    // or pass the data via browser storage (localStorage/sessionStorage).
     // @ts-ignore
     window.descriptionFromAI = description;
     router.push('/my-products?fromAI=true');
@@ -83,8 +82,8 @@ export function ProductDescriptionForm() {
       <div className="lg:col-span-2">
         <Card>
           <CardHeader>
-            <CardTitle className="font-headline">Product Details</CardTitle>
-            <CardDescription>Enter your product information to generate a description.</CardDescription>
+            <CardTitle className="font-headline">{t('Product Details')}</CardTitle>
+            <CardDescription>{t('Enter your product information to generate a description.')}</CardDescription>
           </CardHeader>
           <CardContent>
             <Form {...form}>
@@ -94,7 +93,7 @@ export function ProductDescriptionForm() {
                   name="productName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Product Name</FormLabel>
+                      <FormLabel>{t('Product Name')}</FormLabel>
                       <FormControl>
                         <Input placeholder="e.g., Hand-painted Madhubani Saree" {...field} />
                       </FormControl>
@@ -107,7 +106,7 @@ export function ProductDescriptionForm() {
                   name="craftsmanshipDetails"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Craftsmanship Details</FormLabel>
+                      <FormLabel>{t('Craftsmanship Details')}</FormLabel>
                       <FormControl>
                         <Textarea placeholder="e.g., Woven with pure silk, natural dyes, intricate fish and peacock motifs..." {...field} />
                       </FormControl>
@@ -120,7 +119,7 @@ export function ProductDescriptionForm() {
                   name="culturalSignificance"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Cultural Significance</FormLabel>
+                      <FormLabel>{t('Cultural Significance')}</FormLabel>
                       <FormControl>
                         <Textarea placeholder="e.g., Represents stories from ancient Indian epics, a symbol of tradition..." {...field} />
                       </FormControl>
@@ -133,7 +132,7 @@ export function ProductDescriptionForm() {
                   name="targetAudience"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Target Audience</FormLabel>
+                      <FormLabel>{t('Target Audience')}</FormLabel>
                       <FormControl>
                         <Input placeholder="e.g., Art lovers, collectors of ethnic wear" {...field} />
                       </FormControl>
@@ -143,7 +142,7 @@ export function ProductDescriptionForm() {
                 />
                 <Button type="submit" disabled={isLoading} className="w-full">
                   {isLoading ? <Loader2 className="animate-spin" /> : <Wand2 />}
-                  Generate Description
+                  {t('Generate Description')}
                 </Button>
               </form>
             </Form>
@@ -153,8 +152,8 @@ export function ProductDescriptionForm() {
       <div className="lg:col-span-3">
         <Card className="min-h-full">
           <CardHeader>
-            <CardTitle className="font-headline">Generated Description</CardTitle>
-            <CardDescription>Your AI-crafted product description will appear here.</CardDescription>
+            <CardTitle className="font-headline">{t('Generated Description')}</CardTitle>
+            <CardDescription>{t('Your AI-crafted product description will appear here.')}</CardDescription>
           </CardHeader>
           <CardContent>
             {isLoading ? (
@@ -172,12 +171,12 @@ export function ProductDescriptionForm() {
                         onClick={handleAddDescription}
                     >
                         <Send />
-                        Add Description to Product
+                        {t('Add Description to Product')}
                     </Button>
                 </div>
             ) : (
                 <div className="flex items-center justify-center h-64 border-2 border-dashed rounded-lg">
-                    <p className="text-muted-foreground">Waiting for product details...</p>
+                    <p className="text-muted-foreground">{t('Waiting for product details...')}</p>
                 </div>
             )}
           </CardContent>

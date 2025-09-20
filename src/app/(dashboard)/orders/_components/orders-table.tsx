@@ -25,6 +25,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { useLanguage } from '../../_components/language-provider';
 
 const mockOrders = [
     { id: 'ORD001', customer: 'Ravi Kumar', product: 'Ganjifa Cards', date: '2023-11-23', status: 'Fulfilled', total: '₹2,59.00' },
@@ -54,6 +55,7 @@ const getStatusVariant = (status: string) => {
 
 export function OrdersTable() {
   const [statusFilter, setStatusFilter] = React.useState<string[]>(['Processing', 'Pending', 'Shipped']);
+  const { t } = useLanguage();
 
   const filteredOrders = mockOrders.filter(order => statusFilter.includes(order.status));
 
@@ -70,17 +72,17 @@ export function OrdersTable() {
       <CardHeader>
         <div className="flex items-center justify-between">
             <div>
-                <CardTitle className="font-headline">Orders</CardTitle>
-                <CardDescription>Manage and track your recent orders.</CardDescription>
+                <CardTitle className="font-headline">{t('Orders')}</CardTitle>
+                <CardDescription>{t('Manage and track your recent orders.')}</CardDescription>
             </div>
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button variant="outline">
-                        Filter Status <ChevronDown className="ml-2 h-4 w-4" />
+                        {t('Filter Status')} <ChevronDown className="ml-2 h-4 w-4" />
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                    <DropdownMenuLabel>Filter by status</DropdownMenuLabel>
+                    <DropdownMenuLabel>{t('Filter by status')}</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     {allStatuses.map(status => (
                         <DropdownMenuCheckboxItem
@@ -88,7 +90,7 @@ export function OrdersTable() {
                             checked={statusFilter.includes(status)}
                             onCheckedChange={() => toggleStatusFilter(status)}
                         >
-                            {status}
+                            {t(status)}
                         </DropdownMenuCheckboxItem>
                     ))}
                 </DropdownMenuContent>
@@ -100,14 +102,14 @@ export function OrdersTable() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Order ID</TableHead>
-                <TableHead>Customer</TableHead>
-                <TableHead>Product</TableHead>
-                <TableHead>Date</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className="text-right">Total</TableHead>
+                <TableHead>{t('Order ID')}</TableHead>
+                <TableHead>{t('Customer')}</TableHead>
+                <TableHead>{t('Product')}</TableHead>
+                <TableHead>{t('Date')}</TableHead>
+                <TableHead>{t('Status')}</TableHead>
+                <TableHead className="text-right">{t('Total')}</TableHead>
                 <TableHead>
-                  <span className="sr-only">Actions</span>
+                  <span className="sr-only">{t('Actions')}</span>
                 </TableHead>
               </TableRow>
             </TableHeader>
@@ -115,26 +117,26 @@ export function OrdersTable() {
               {filteredOrders.length > 0 ? (
                 filteredOrders.map((order) => (
                   <TableRow key={order.id}>
-                    <TableCell className="font-medium">{order.id}</TableCell>
-                    <TableCell>{order.customer}</TableCell>
-                    <TableCell>{order.product}</TableCell>
-                    <TableCell>{order.date}</TableCell>
+                    <TableCell className="font-medium">{t(order.id)}</TableCell>
+                    <TableCell>{t(order.customer)}</TableCell>
+                    <TableCell>{t(order.product)}</TableCell>
+                    <TableCell>{t(order.date)}</TableCell>
                     <TableCell>
-                      <Badge variant={getStatusVariant(order.status)}>{order.status}</Badge>
+                      <Badge variant={getStatusVariant(order.status)}>{t(order.status)}</Badge>
                     </TableCell>
-                    <TableCell className="text-right">{order.total}</TableCell>
+                    <TableCell className="text-right">{t(order.total)}</TableCell>
                     <TableCell>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button aria-haspopup="true" size="icon" variant="ghost">
                             <MoreHorizontal className="h-4 w-4" />
-                            <span className="sr-only">Toggle menu</span>
+                            <span className="sr-only">{t('Toggle menu')}</span>
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                          <DropdownMenuItem>View Details</DropdownMenuItem>
-                          <DropdownMenuItem>Print Invoice</DropdownMenuItem>
+                          <DropdownMenuLabel>{t('Actions')}</DropdownMenuLabel>
+                          <DropdownMenuItem>{t('View Details')}</DropdownMenuItem>
+                          <DropdownMenuItem>{t('Print Invoice')}</DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </TableCell>
@@ -143,7 +145,7 @@ export function OrdersTable() {
               ) : (
                 <TableRow>
                   <TableCell colSpan={7} className="h-24 text-center">
-                    No orders found.
+                    {t('No orders found.')}
                   </TableCell>
                 </TableRow>
               )}
@@ -151,8 +153,8 @@ export function OrdersTable() {
           </Table>
         </div>
         <div className="flex items-center justify-end space-x-2 py-4">
-            <Button variant="outline" size="sm" disabled>Previous</Button>
-            <Button variant="outline" size="sm">Next</Button>
+            <Button variant="outline" size="sm" disabled>{t('Previous')}</Button>
+            <Button variant="outline" size="sm">{t('Next')}</Button>
         </div>
       </CardContent>
     </Card>

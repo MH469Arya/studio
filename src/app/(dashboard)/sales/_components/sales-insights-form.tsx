@@ -12,6 +12,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { useLanguage } from '../../_components/language-provider';
 
 const formSchema = z.object({
   productName: z.string().min(2),
@@ -30,6 +31,7 @@ export function SalesInsightsForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [showInventoryAlert, setShowInventoryAlert] = useState(false);
   const { toast } = useToast();
+  const { t } = useLanguage();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -59,8 +61,8 @@ export function SalesInsightsForm() {
     } catch (error) {
       console.error(error);
       toast({
-        title: 'Error Generating Insights',
-        description: 'An unexpected error occurred. Please try again.',
+        title: t('Error Generating Insights'),
+        description: t('An unexpected error occurred. Please try again.'),
         variant: 'destructive',
       });
     } finally {
@@ -73,39 +75,39 @@ export function SalesInsightsForm() {
       <div className="lg:col-span-2">
         <Card>
           <CardHeader>
-            <CardTitle className="font-headline">Sales Data</CardTitle>
-            <CardDescription>Provide your sales data to get AI-powered insights.</CardDescription>
+            <CardTitle className="font-headline">{t('Sales Data')}</CardTitle>
+            <CardDescription>{t('Provide your sales data to get AI-powered insights.')}</CardDescription>
           </CardHeader>
           <CardContent>
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <FormField control={form.control} name="productName" render={({ field }) => (
-                        <FormItem><FormLabel>Product</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                        <FormItem><FormLabel>{t('Product')}</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
                     )} />
                     <FormField control={form.control} name="artisanId" render={({ field }) => (
-                        <FormItem><FormLabel>Artisan ID</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                        <FormItem><FormLabel>{t('Artisan ID')}</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
                     )} />
                     <FormField control={form.control} name="currentPrice" render={({ field }) => (
-                        <FormItem><FormLabel>Price (₹)</FormLabel><FormControl><Input type="number" {...field} /></FormControl><FormMessage /></FormItem>
+                        <FormItem><FormLabel>{t('Price (₹)')}</FormLabel><FormControl><Input type="number" {...field} /></FormControl><FormMessage /></FormItem>
                     )} />
                     <FormField control={form.control} name="averageOrderValue" render={({ field }) => (
-                        <FormItem><FormLabel>Avg. Order (₹)</FormLabel><FormControl><Input type="number" {...field} /></FormControl><FormMessage /></FormItem>
+                        <FormItem><FormLabel>{t('Avg. Order (₹)')}</FormLabel><FormControl><Input type="number" {...field} /></FormControl><FormMessage /></FormItem>
                     )} />
                     <FormField control={form.control} name="newItemVolume" render={({ field }) => (
-                        <FormItem><FormLabel>New Items</FormLabel><FormControl><Input type="number" {...field} /></FormControl><FormMessage /></FormItem>
+                        <FormItem><FormLabel>{t('New Items')}</FormLabel><FormControl><Input type="number" {...field} /></FormControl><FormMessage /></FormItem>
                     )} />
                     <FormField control={form.control} name="itemsSoldVolume" render={({ field }) => (
-                        <FormItem><FormLabel>Items Sold</FormLabel><FormControl><Input type="number" {...field} /></FormControl><FormMessage /></FormItem>
+                        <FormItem><FormLabel>{t('Items Sold')}</FormLabel><FormControl><Input type="number" {...field} /></FormControl><FormMessage /></FormItem>
                     )} />
                 </div>
                 <FormField control={form.control} name="regionalDemand" render={({ field }) => (
-                    <FormItem><FormLabel>Regional Demand</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                    <FormItem><FormLabel>{t('Regional Demand')}</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
                 )} />
 
                 <Button type="submit" disabled={isLoading} className="w-full">
                   {isLoading ? <Loader2 className="animate-spin" /> : <Lightbulb />}
-                  Get Insights
+                  {t('Get Insights')}
                 </Button>
               </form>
             </Form>
@@ -115,16 +117,16 @@ export function SalesInsightsForm() {
       <div className="lg:col-span-3">
         <Card className="min-h-full">
           <CardHeader>
-            <CardTitle className="font-headline">Sales & Pricing Insights</CardTitle>
-            <CardDescription>AI analysis of your sales data will appear here.</CardDescription>
+            <CardTitle className="font-headline">{t('Sales & Pricing Insights')}</CardTitle>
+            <CardDescription>{t('AI analysis of your sales data will appear here.')}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
              {showInventoryAlert && (
                 <Alert variant="destructive">
                     <AlertTriangle className="h-4 w-4" />
-                    <AlertTitle>Inventory Alert</AlertTitle>
+                    <AlertTitle>{t('Inventory Alert')}</AlertTitle>
                     <AlertDescription>
-                        You've created more items than you've sold in this period. The AI insights may include strategies to address this.
+                        {t("You've created more items than you've sold in this period. The AI insights may include strategies to address this.")}
                     </AlertDescription>
                 </Alert>
              )}
@@ -136,10 +138,10 @@ export function SalesInsightsForm() {
                     <div className="h-4 bg-muted rounded animate-pulse w-4/6"></div>
                 </div>
             ) : insights ? (
-                <div className="prose prose-sm max-w-none text-foreground dark:prose-invert" dangerouslySetInnerHTML={{ __html: insights.replace(/\n/g, '<br />') }} />
+                <div className="prose prose-sm max-w-none text-foreground dark:prose-invert" dangerouslySetInnerHTML={{ __html: t(insights).replace(/\n/g, '<br />') }} />
             ) : (
                 <div className="flex items-center justify-center h-64 border-2 border-dashed rounded-lg">
-                    <p className="text-muted-foreground">Waiting for sales data...</p>
+                    <p className="text-muted-foreground">{t('Waiting for sales data...')}</p>
                 </div>
             )}
           </CardContent>
