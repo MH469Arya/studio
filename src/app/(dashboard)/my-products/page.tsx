@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
@@ -14,7 +15,7 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { PlusCircle, Pencil } from 'lucide-react';
+import { PlusCircle, Pencil, Wand2, Lightbulb } from 'lucide-react';
 import {
   Card,
   CardContent,
@@ -128,11 +129,18 @@ export default function MyProductsPage() {
                   </Label>
                   <Input id="name" name="name" className="col-span-3" required />
                 </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="description" className="text-right">
+                <div className="grid grid-cols-4 items-start gap-4">
+                   <Label htmlFor="description" className="text-right pt-2">
                     Description
                   </Label>
-                  <Input id="description" name="description" className="col-span-3" required />
+                  <div className="col-span-3 grid gap-2">
+                    <Input id="description" name="description" required />
+                    <Button variant="outline" size="sm" asChild>
+                        <Link href="/products" target="_blank">
+                           <Wand2 className="mr-2 h-3 w-3"/> Generate with AI
+                        </Link>
+                    </Button>
+                  </div>
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label htmlFor="imageUrl" className="text-right">
@@ -140,11 +148,18 @@ export default function MyProductsPage() {
                   </Label>
                   <Input id="imageUrl" name="imageUrl" className="col-span-3" required />
                 </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="price" className="text-right">
+                <div className="grid grid-cols-4 items-start gap-4">
+                  <Label htmlFor="price" className="text-right pt-2">
                     Price
                   </Label>
-                  <Input id="price" name="price" type="number" className="col-span-3" required />
+                   <div className="col-span-3 grid gap-2">
+                    <Input id="price" name="price" type="number" required />
+                     <Button variant="outline" size="sm" asChild>
+                        <Link href="/sales" target="_blank">
+                           <Lightbulb className="mr-2 h-3 w-3"/> Suggest Price
+                        </Link>
+                    </Button>
+                  </div>
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label htmlFor="category" className="text-right">
@@ -173,8 +188,9 @@ export default function MyProductsPage() {
               <Image
                 src={product.imageUrl}
                 alt={product.description}
-                fill
-                className="object-cover"
+                width={300}
+                height={300}
+                className="object-cover w-full h-full"
                 data-ai-hint={product.imageHint}
               />
             </div>
