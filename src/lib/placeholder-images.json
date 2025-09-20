@@ -28,13 +28,13 @@
     {
       "id": "ganjifa-cards",
       "description": "Hand-painted Ganjifa cards spread on a surface.",
-      "imageUrl": "https://picsum.photos/seed/ganjifacards/400/300",
+      "imageUrl": "https://i.pinimg.com/564x/0f/52/39/0f52396b1b147a488339f010a30b9165.jpg",
       "imageHint": "Ganjifa cards"
     },
     {
       "id": "kolhapuri-chappals",
       "description": "A pair of traditional Kolhapuri Chappals.",
-      "imageUrl": "https://picsum.photos/seed/kolhapurichappals/400/300",
+      "imageUrl": "https://i.pinimg.com/564x/b8/9f/c6/b89fc665f80931561b373f15a1a10839.jpg",
       "imageHint": "leather sandals"
     }
   ]
