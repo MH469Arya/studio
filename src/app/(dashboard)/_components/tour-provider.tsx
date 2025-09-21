@@ -82,7 +82,7 @@ export const TourProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [steps, setSteps] = useState<Step[]>([]);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
-  const [spotlightStyle, setSpotlightStyle] = useState({});
+  const [spotlightStyle, setSpotlightStyle] = useState<React.CSSProperties>({});
   const targetRef = useRef<HTMLElement | null>(null);
 
   const startTour = useCallback(() => {
@@ -116,35 +116,43 @@ export const TourProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const currentStep = isOpen ? steps[currentStepIndex] : null;
 
   useEffect(() => {
+    let originalTargetZIndex: string;
+    
     if (currentStep) {
       const targetElement = document.querySelector(currentStep.target) as HTMLElement;
       if (targetElement) {
         targetRef.current = targetElement;
-        const rect = targetElement.getBoundingClientRect();
         
         targetElement.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
         
         const updateStyle = () => {
-            const rect = targetElement.getBoundingClientRect();
+            if (!targetRef.current) return;
+            const rect = targetRef.current.getBoundingClientRect();
             setSpotlightStyle({
                 width: `${rect.width + 16}px`,
                 height: `${rect.height + 16}px`,
                 top: `${rect.top - 8}px`,
                 left: `${rect.left - 8}px`,
             });
-            targetElement.style.zIndex = '101';
+            originalTargetZIndex = targetRef.current.style.zIndex;
+            targetRef.current.style.zIndex = '101';
             document.body.classList.add('tour-active');
         }
 
-        // Delay to allow for scroll
         const timer = setTimeout(updateStyle, 300);
         window.addEventListener('resize', updateStyle);
 
         return () => {
             clearTimeout(timer);
             window.removeEventListener('resize', updateStyle);
-            targetElement.style.zIndex = '';
+            if (targetRef.current) {
+                targetRef.current.style.zIndex = originalTargetZIndex;
+            }
+            document.body.classList.remove('tour-active');
         }
+      } else {
+        // if target not found, go to next step
+        goToNextStep();
       }
     } else {
         document.body.classList.remove('tour-active');
@@ -153,7 +161,7 @@ export const TourProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   return (
     <TourContext.Provider value={{ startTour }}>
-      {isOpen && <div className="fixed inset-0 z-[99] bg-black/50 backdrop-blur-sm" onClick={stopTour} />}
+      {isOpen && <div className="fixed inset-0 z-[99] bg-black/50" onClick={stopTour} />}
       {isOpen && currentStep && <div className="fixed z-[100] bg-background rounded-lg shadow-2xl transition-all duration-300" style={spotlightStyle} />}
       
       {children}
@@ -164,10 +172,7 @@ export const TourProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 <div 
                     className="fixed" 
                     style={{
-                        top: spotlightStyle.top,
-                        left: spotlightStyle.left,
-                        width: spotlightStyle.width,
-                        height: spotlightStyle.height,
+                        ...spotlightStyle,
                         zIndex: 102
                     }}
                 />
@@ -178,9 +183,10 @@ export const TourProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 className="z-[103] w-80"
                 onEscapeKeyDown={stopTour}
                 onPointerDownOutside={(e) => {
-                    if (e.target !== targetRef.current && !targetRef.current?.contains(e.target as Node)) {
+                    if (targetRef.current && !targetRef.current.contains(e.target as Node)) {
                        stopTour();
                     }
+                    e.preventDefault();
                 }}
             >
                 <div className="space-y-4">
