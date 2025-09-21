@@ -101,6 +101,13 @@ export function SalesInsightsForm() {
                     <FormField control={form.control} name="newItemVolume" render={({ field }) => (
                         <FormItem><FormLabel>{t('New Items')}</FormLabel><FormControl><Input type="number" {...field} /></FormControl><FormMessage /></FormItem>
                     )} />
+                    <FormItem>
+                        <FormLabel>{t('Items Sold')}</FormLabel>
+                        <FormControl>
+                            <Input type="number" value={fetchedItemsSold ?? ''} placeholder={t('AI will fetch this')} readOnly disabled />
+                        </FormControl>
+                        <FormMessage />
+                    </FormItem>
                 </div>
                 <FormField control={form.control} name="regionalDemand" render={({ field }) => (
                     <FormItem><FormLabel>{t('Regional Demand')}</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
@@ -128,15 +135,6 @@ export function SalesInsightsForm() {
                     <AlertTitle>{t('Inventory Alert')}</AlertTitle>
                     <AlertDescription>
                         {t("You've created more items than you've sold in this period. The AI insights may include strategies to address this.")}
-                    </AlertDescription>
-                </Alert>
-             )}
-             {fetchedItemsSold !== null && (
-                 <Alert>
-                    <Lightbulb className="h-4 w-4" />
-                    <AlertTitle>{t('Sales Data Fetched')}</AlertTitle>
-                    <AlertDescription>
-                        {t('The AI found that you have sold')} {fetchedItemsSold} {t('units of this product based on your order history.')}
                     </AlertDescription>
                 </Alert>
              )}
