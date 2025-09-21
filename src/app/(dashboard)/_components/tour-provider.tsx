@@ -76,13 +76,14 @@ const getTourSteps = (t: (text: string) => string): Step[] => [
   },
 ];
 
-export const TourProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const TourProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const { t } = useLanguage();
   const [steps, setSteps] = useState<Step[]>([]);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   const [spotlightStyle, setSpotlightStyle] = useState<React.CSSProperties>({});
   const targetRef = useRef<HTMLElement | null>(null);
+  const originalTargetZIndex = useRef<string>('');
 
   const startTour = useCallback(() => {
     const tourSteps = getTourSteps(t);
@@ -92,6 +93,10 @@ export const TourProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, [t]);
 
   const stopTour = useCallback(() => {
+    if (targetRef.current) {
+        targetRef.current.style.zIndex = originalTargetZIndex.current;
+        targetRef.current.classList.remove('tour-active');
+    }
     setIsOpen(false);
     setSpotlightStyle({});
     targetRef.current = null;
@@ -114,9 +119,11 @@ export const TourProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const currentStep = isOpen ? steps[currentStepIndex] : null;
 
   useEffect(() => {
-    if (!currentStep) {
-        document.body.classList.remove('tour-active');
-        return;
+    if (!currentStep) return;
+
+    if (targetRef.current) {
+        targetRef.current.style.zIndex = originalTargetZIndex.current;
+        targetRef.current.classList.remove('tour-active');
     }
 
     const targetElement = document.querySelector(currentStep.target) as HTMLElement;
@@ -130,9 +137,9 @@ export const TourProvider: React.FC<{ children: React.ReactNode }> = ({ children
             if (!targetRef.current) return;
             const rect = targetRef.current.getBoundingClientRect();
             
-            const originalZIndex = targetRef.current.style.zIndex;
+            originalTargetZIndex.current = targetRef.current.style.zIndex;
             targetRef.current.style.zIndex = '101';
-            document.body.classList.add('tour-active');
+            targetRef.current.classList.add('tour-active');
 
             setSpotlightStyle({
                 width: `${rect.width + 16}px`,
@@ -146,26 +153,19 @@ export const TourProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 pointerEvents: 'none',
                 transition: 'all 0.3s ease-in-out',
             });
-
-            return () => {
-                if (targetRef.current) {
-                    targetRef.current.style.zIndex = originalZIndex;
-                }
-                document.body.classList.remove('tour-active');
-            };
         };
 
         const timeoutId = setTimeout(updateStyle, 300); // Wait for scroll and animations
         window.addEventListener('resize', updateStyle);
 
-        const cleanup = updateStyle();
-
         return () => {
             clearTimeout(timeoutId);
             window.removeEventListener('resize', updateStyle);
-            if (cleanup) cleanup();
+            if (targetRef.current) {
+                targetRef.current.style.zIndex = originalTargetZIndex.current;
+                targetRef.current.classList.remove('tour-active');
+            }
         };
-
     } else {
       goToNextStep();
     }
@@ -230,3 +230,5 @@ export const TourProvider: React.FC<{ children: React.ReactNode }> = ({ children
     </TourContext.Provider>
   );
 };
+
+    

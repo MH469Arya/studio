@@ -79,7 +79,10 @@
   body {
     @apply bg-background text-foreground;
   }
-  body.tour-active * {
+  .tour-active {
     position: relative;
+    z-index: 101;
   }
 }
+
+    
