@@ -62,7 +62,7 @@ const initialProducts: Product[] = [
   {
     name: 'Handwoven Pashmina Shawl',
     description: 'Luxurious and soft shawl from Kashmir, made from fine Pashmina wool.',
-    imageUrl: 'https://i.pinimg.com/564x/e7/be/32/e7be325f4625b905d452d7e6515a81e3.jpg',
+    imageUrl: 'https://i.pinimg.com/736x/97/b9/c5/97b9c52661398b7ad793868f5876c2f8.jpg',
     imageHint: 'pashmina shawl',
     price: 8500,
     category: 'Apparel',
