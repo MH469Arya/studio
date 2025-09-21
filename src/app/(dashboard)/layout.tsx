@@ -40,8 +40,22 @@ export default function DashboardLayout({
             </SidebarContent>
           </Sidebar>
           <SidebarInset>
-            <Header />
-            {children}
+            <div className="relative flex-1">
+              <div
+                className="absolute inset-0 z-0"
+                style={{
+                  backgroundImage: "url('/background.png')",
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  backgroundRepeat: 'no-repeat',
+                  opacity: 0.2,
+                }}
+              />
+              <div className="relative z-10 flex min-h-screen flex-col">
+                <Header />
+                <div className="flex-1">{children}</div>
+              </div>
+            </div>
           </SidebarInset>
         </SidebarProvider>
       </TourProvider>
