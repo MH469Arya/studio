@@ -96,7 +96,6 @@ export const TourProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setIsOpen(false);
     setCurrentStepIndex(0);
     setSteps([]);
-    document.body.classList.remove('tour-active');
   };
 
   const goToNextStep = () => {
@@ -116,10 +115,12 @@ export const TourProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const currentStep = isOpen ? steps[currentStepIndex] : null;
 
   useEffect(() => {
-    let originalTargetZIndex: string;
+    let originalTargetZIndex: string | undefined;
+    let targetElement: HTMLElement | null = null;
     
     if (currentStep) {
-      const targetElement = document.querySelector(currentStep.target) as HTMLElement;
+      targetElement = document.querySelector(currentStep.target) as HTMLElement;
+      
       if (targetElement) {
         targetRef.current = targetElement;
         
@@ -139,13 +140,13 @@ export const TourProvider: React.FC<{ children: React.ReactNode }> = ({ children
             document.body.classList.add('tour-active');
         }
 
-        const timer = setTimeout(updateStyle, 300);
+        const timer = setTimeout(updateStyle, 300); // Wait for scroll to finish
         window.addEventListener('resize', updateStyle);
 
         return () => {
             clearTimeout(timer);
             window.removeEventListener('resize', updateStyle);
-            if (targetRef.current) {
+            if (targetRef.current && originalTargetZIndex !== undefined) {
                 targetRef.current.style.zIndex = originalTargetZIndex;
             }
             document.body.classList.remove('tour-active');
@@ -157,12 +158,13 @@ export const TourProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } else {
         document.body.classList.remove('tour-active');
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentStep]);
 
   return (
     <TourContext.Provider value={{ startTour }}>
       {isOpen && <div className="fixed inset-0 z-[99] bg-black/50" onClick={stopTour} />}
-      {isOpen && currentStep && <div className="fixed z-[100] bg-background rounded-lg shadow-2xl transition-all duration-300" style={spotlightStyle} />}
+      {isOpen && currentStep && <div className="fixed z-[100] bg-background rounded-lg shadow-2xl transition-all duration-300 pointer-events-none" style={spotlightStyle} />}
       
       {children}
 
@@ -183,10 +185,11 @@ export const TourProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 className="z-[103] w-80"
                 onEscapeKeyDown={stopTour}
                 onPointerDownOutside={(e) => {
-                    if (targetRef.current && !targetRef.current.contains(e.target as Node)) {
-                       stopTour();
+                    if (targetRef.current && targetRef.current.contains(e.target as Node)) {
+                       e.preventDefault();
+                       return;
                     }
-                    e.preventDefault();
+                    stopTour();
                 }}
             >
                 <div className="space-y-4">
