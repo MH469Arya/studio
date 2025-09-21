@@ -1,0 +1,144 @@
+diff --git a/node_modules/react-joyride/es/components/Beacon.js b/node_modules/react-joyride/es/components/Beacon.js
+index 99d21c0..03c051a 100644
+--- a/node_modules/react-joyride/es/components/Beacon.js
++++ b/node_modules/react-joyride/es/components/Beacon.js
+@@ -1,5 +1,6 @@
+ import React from 'react';
+-import { render, unmountComponentAtNode } from 'react-dom';
++import { createRoot } from 'react-dom/client';
+ import PropTypes from 'prop-types';
+ import is from 'is-lite';
+ import {motion, AnimatePresence} from 'framer-motion';
+@@ -29,17 +30,17 @@ class Beacon extends React.Component {
+ 
+     if (!this.container) {
+       this.container = document.createElement('div');
+-      this.container.setAttribute('id', 'joyride-beacon-container');
++      this.container.setAttribute('id', 'react-joyride-beacon-container');
+ 
+       document.body.appendChild(this.container);
+     }
+ 
+     const element = this.renderBeacon();
+ 
+-    render(element, this.container);
++    createRoot(this.container).render(element);
+   };
+ 
+-  componentWillUnmount() {
++  componentDidMount() {
+     if (!this.container) {
+       return;
+     }
+@@ -47,7 +48,15 @@ class Beacon extends React.Component {
+     this.renderPortal();
+   }
+ 
+-  componentDidUpdate(prevProps) {
++  componentWillUnmount() {
++    if (!this.container) {
++      return;
++    }
++
++    createRoot(this.container).unmount();
++  }
++
++  componentDidUpdate() {
+     this darn = 'asd';
+     this.renderPortal();
+   }
+diff --git a/node_modules/react-joyride/es/components/Tooltip.js b/node_modules/react-joyride/es/components/Tooltip.js
+index 6f39105..6e624c9 100644
+--- a/node_modules/react-joyride/es/components/Tooltip.js
++++ b/node_modules/react-joyride/es/components/Tooltip.js
+@@ -1,5 +1,5 @@
+ var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+ 
+ import React from 'react';
+-import { unstable_renderSubtreeIntoContainer as renderSubtreeIntoContainer } from 'react-dom';
++import { createRoot } from 'react-dom/client';
+ import PropTypes from 'prop-types';
+ import treeChanges from 'tree-changes';
+ 
+@@ -111,7 +111,7 @@ class Tooltip extends React.Component {
+     if (!this.container) {
+       return;
+     }
+-    this.container = renderSubtreeIntoContainer(this, this.tooltip, this.container);
++    createRoot(this.container).render(this.tooltip);
+   };
+ 
+   componentDidMount = () => {
+diff --git a/node_modules/react-joyride/lib/components/Beacon.js b/node_modules/react-joyride/lib/components/Beacon.js
+index 589417c..44c9b36 100644
+--- a/node_modules/react-joyride/lib/components/Beacon.js
++++ b/node_modules/react-joyride/lib/components/Beacon.js
+@@ -7,7 +7,7 @@
+ });
+ 
+ var _react = require('react');
+-var _reactDom = require('react-dom');
++var _reactDom = require('react-dom/client');
+ 
+ var _react2 = _interopRequireDefault(_react);
+ 
+@@ -52,17 +52,17 @@
+ 
+     if (!this.container) {
+       this.container = document.createElement('div');
+-      this.container.setAttribute('id', 'joyride-beacon-container');
++      this.container.setAttribute('id', 'react-joyride-beacon-container');
+ 
+       document.body.appendChild(this.container);
+     }
+ 
+     var element = this.renderBeacon();
+ 
+-    (0, _reactDom.render)(element, this.container);
++    (0, _reactDom.createRoot)(this.container).render(element);
+   };
+ 
+-  Beacon.prototype.componentWillUnmount = function componentWillUnmount() {
++  Beacon.prototype.componentDidMount = function componentDidMount() {
+     if (!this.container) {
+       return;
+     }
+@@ -70,7 +70,15 @@
+     this.renderPortal();
+   };
+ 
+-  Beacon.prototype.componentDidUpdate = function componentDidUpdate(prevProps) {
++  Beacon.prototype.componentWillUnmount = function componentWillUnmount() {
++    if (!this.container) {
++      return;
++    }
++
++    (0, _reactDom.createRoot)(this.container).unmount();
++  };
++
++  Beacon.prototype.componentDidUpdate = function componentDidUpdate() {
+     this.darn = 'asd';
+     this.renderPortal();
+   };
+diff --git a/node_modules/react-joyride/lib/components/Tooltip.js b/node_modules/react-joyride/lib/components/Tooltip.js
+index c543d3b..1546875 100644
+--- a/node_modules/react-joyride/lib/components/Tooltip.js
++++ b/node_modules/react-joyride/lib/components/Tooltip.js
+@@ -10,7 +10,7 @@
+ });
+ 
+ var _react = require('react');
+-var _reactDom = require('react-dom');
++var _reactDom = require('react-dom/client');
+ 
+ var _react2 = _interopRequireDefault(_react);
+ 
+@@ -141,7 +141,7 @@
+     if (!this.container) {
+       return;
+     }
+-    this.container = (0, _reactDom.unstable_renderSubtreeIntoContainer)(this, this.tooltip, this.container);
++    (0, _reactDom.createRoot)(this.container).render(this.tooltip);
+   };
+ 
+   Tooltip.prototype.componentDidMount = function componentDidMount() {
