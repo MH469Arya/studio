@@ -40,9 +40,19 @@ export default function DashboardLayout({
             </SidebarContent>
           </Sidebar>
           <SidebarInset>
-            <div className="relative flex min-h-screen flex-col bg-background">
-              <Header />
-              <div className="flex-1">{children}</div>
+            <div
+              className="relative flex min-h-screen flex-col"
+              style={{
+                backgroundImage: "url('/background.svg')",
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundAttachment: 'fixed',
+              }}
+            >
+              <div className="relative z-10 flex min-h-screen flex-col bg-background/80 backdrop-blur-sm">
+                <Header />
+                <div className="flex-1">{children}</div>
+              </div>
             </div>
           </SidebarInset>
         </SidebarProvider>
