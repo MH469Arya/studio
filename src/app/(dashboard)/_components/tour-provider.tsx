@@ -92,19 +92,20 @@ export const TourProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setIsOpen(true);
   }, [t]);
 
-  const stopTour = () => {
+  const stopTour = useCallback(() => {
     setIsOpen(false);
-    setCurrentStepIndex(0);
-    setSteps([]);
-  };
+    document.body.classList.remove('tour-active');
+    setSpotlightStyle({});
+    targetRef.current = null;
+  }, []);
 
-  const goToNextStep = () => {
+  const goToNextStep = useCallback(() => {
     if (currentStepIndex < steps.length - 1) {
       setCurrentStepIndex(prev => prev + 1);
     } else {
       stopTour();
     }
-  };
+  }, [currentStepIndex, steps.length, stopTour]);
 
   const goToPreviousStep = () => {
     if (currentStepIndex > 0) {
@@ -115,13 +116,14 @@ export const TourProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const currentStep = isOpen ? steps[currentStepIndex] : null;
 
   useEffect(() => {
-    let originalTargetZIndex: string | undefined;
-    let targetElement: HTMLElement | null = null;
-    
-    if (currentStep) {
-      targetElement = document.querySelector(currentStep.target) as HTMLElement;
-      
-      if (targetElement) {
+    if (!currentStep) {
+        document.body.classList.remove('tour-active');
+        return;
+    }
+
+    const targetElement = document.querySelector(currentStep.target) as HTMLElement;
+
+    if (targetElement) {
         targetRef.current = targetElement;
         
         targetElement.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
@@ -129,92 +131,105 @@ export const TourProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const updateStyle = () => {
             if (!targetRef.current) return;
             const rect = targetRef.current.getBoundingClientRect();
+            
+            const originalZIndex = targetRef.current.style.zIndex;
+            targetRef.current.style.zIndex = '101';
+            document.body.classList.add('tour-active');
+
             setSpotlightStyle({
                 width: `${rect.width + 16}px`,
                 height: `${rect.height + 16}px`,
                 top: `${rect.top - 8}px`,
                 left: `${rect.left - 8}px`,
+                position: 'fixed',
+                zIndex: 100,
+                boxShadow: '0 0 0 9999px rgba(0, 0, 0, 0.5)',
+                borderRadius: '8px',
+                pointerEvents: 'none',
+                transition: 'all 0.3s ease-in-out',
             });
-            originalTargetZIndex = targetRef.current.style.zIndex;
-            targetRef.current.style.zIndex = '101';
-            document.body.classList.add('tour-active');
-        }
 
-        const timer = setTimeout(updateStyle, 300); // Wait for scroll to finish
+            return () => {
+                if (targetRef.current) {
+                    targetRef.current.style.zIndex = originalZIndex;
+                }
+                document.body.classList.remove('tour-active');
+            };
+        };
+
+        const timeoutId = setTimeout(updateStyle, 300); // Wait for scroll and animations
         window.addEventListener('resize', updateStyle);
 
+        const cleanup = updateStyle();
+
         return () => {
-            clearTimeout(timer);
+            clearTimeout(timeoutId);
             window.removeEventListener('resize', updateStyle);
-            if (targetRef.current && originalTargetZIndex !== undefined) {
-                targetRef.current.style.zIndex = originalTargetZIndex;
-            }
-            document.body.classList.remove('tour-active');
-        }
-      } else {
-        // if target not found, go to next step
-        goToNextStep();
-      }
+            if (cleanup) cleanup();
+        };
+
     } else {
-        document.body.classList.remove('tour-active');
+      // if target not found, try to go to the next step
+      goToNextStep();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentStep]);
+  }, [currentStep, goToNextStep]);
 
   return (
     <TourContext.Provider value={{ startTour }}>
-      {isOpen && <div className="fixed inset-0 z-[99] bg-black/50" onClick={stopTour} />}
-      {isOpen && currentStep && <div className="fixed z-[100] bg-background rounded-lg shadow-2xl transition-all duration-300 pointer-events-none" style={spotlightStyle} />}
-      
       {children}
 
       {isOpen && currentStep && targetRef.current && (
-        <Popover open={isOpen} onOpenChange={setIsOpen}>
-            <PopoverTrigger asChild>
-                <div 
-                    className="fixed" 
-                    style={{
-                        ...spotlightStyle,
-                        zIndex: 102
+        <>
+            <div style={spotlightStyle} />
+            <Popover open={isOpen}>
+                <PopoverTrigger asChild>
+                    <div style={{
+                        position: 'fixed',
+                        top: spotlightStyle.top,
+                        left: spotlightStyle.left,
+                        width: spotlightStyle.width,
+                        height: spotlightStyle.height,
+                        zIndex: 102,
+                    }}/>
+                </PopoverTrigger>
+                <PopoverContent 
+                    side={currentStep.side} 
+                    align={currentStep.align}
+                    className="z-[103] w-80"
+                    onEscapeKeyDown={stopTour}
+                    onPointerDownOutside={(e) => {
+                        // Prevent closing if the click is on the highlighted element
+                        if (targetRef.current && targetRef.current.contains(e.target as Node)) {
+                            e.preventDefault();
+                        } else {
+                            stopTour();
+                        }
                     }}
-                />
-            </PopoverTrigger>
-            <PopoverContent 
-                side={currentStep.side} 
-                align={currentStep.align}
-                className="z-[103] w-80"
-                onEscapeKeyDown={stopTour}
-                onPointerDownOutside={(e) => {
-                    if (targetRef.current && targetRef.current.contains(e.target as Node)) {
-                       e.preventDefault();
-                       return;
-                    }
-                    stopTour();
-                }}
-            >
-                <div className="space-y-4">
-                    <div className="space-y-1">
-                        <h4 className="font-medium leading-none">{currentStep.title}</h4>
-                        <p className="text-sm text-muted-foreground">{currentStep.content}</p>
-                    </div>
-                    <div className="flex justify-between items-center">
-                        <span className="text-sm text-muted-foreground">
-                            {t('Step')} {currentStepIndex + 1} of {steps.length}
-                        </span>
-                        <div className="flex gap-2">
-                        {currentStepIndex > 0 && (
-                            <Button variant="outline" size="sm" onClick={goToPreviousStep}>
-                                {t('Previous')}
+                >
+                    <div className="space-y-4">
+                        <div className="space-y-1">
+                            <h4 className="font-medium leading-none">{currentStep.title}</h4>
+                            <p className="text-sm text-muted-foreground">{currentStep.content}</p>
+                        </div>
+                        <div className="flex justify-between items-center">
+                            <span className="text-sm text-muted-foreground">
+                                {t('Step')} {currentStepIndex + 1} of {steps.length}
+                            </span>
+                            <div className="flex gap-2">
+                            {currentStepIndex > 0 && (
+                                <Button variant="outline" size="sm" onClick={goToPreviousStep}>
+                                    {t('Previous')}
+                                </Button>
+                            )}
+                            <Button size="sm" onClick={goToNextStep}>
+                                {currentStepIndex === steps.length - 1 ? t('Finish') : t('Next')}
                             </Button>
-                        )}
-                        <Button size="sm" onClick={goToNextStep}>
-                            {currentStepIndex === steps.length - 1 ? t('Finish') : t('Next')}
-                        </Button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </PopoverContent>
-        </Popover>
+                </PopoverContent>
+            </Popover>
+        </>
       )}
     </TourContext.Provider>
   );
