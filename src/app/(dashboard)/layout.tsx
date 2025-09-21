@@ -40,9 +40,9 @@ export default function DashboardLayout({
             </SidebarContent>
           </Sidebar>
           <SidebarInset>
-            <div id="main-content" className="relative flex min-h-screen flex-col">
+            <div className="relative flex min-h-screen flex-col">
               <Header />
-              <div className="relative z-10 flex-1">{children}</div>
+              <div className="flex-1">{children}</div>
             </div>
           </SidebarInset>
         </SidebarProvider>
