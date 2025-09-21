@@ -108,7 +108,11 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         'Here you can add, view, and edit all of your product listings.', 'My Products',
         'Explore powerful AI tools to help you with product descriptions, sales insights, and more!', 'AI Tools',
         'Access your profile, settings, and logout from here.', 'Your Profile',
-        'You can restart this tour anytime by clicking this button!', 'KalGuide'
+        'You can restart this tour anytime by clicking this button!', 'KalGuide',
+        // Profile Page
+        'My Profile', 'Edit Your Profile', "Share your story and what makes your craft unique. This information will be visible to customers.",
+        'Profile Photo URL', 'Your Story', "Tell us about your journey, your craft, and your passion...", 'Save Profile',
+        'Profile Saved', 'Your profile has been updated successfully.'
       ];
       translateAndStore(textsToTranslate);
     }

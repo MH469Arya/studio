@@ -17,6 +17,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useLanguage } from './language-provider';
+import Link from 'next/link';
 
 export function UserNav() {
   const { locale, setLocale, t } = useLanguage();
@@ -42,9 +43,11 @@ export function UserNav() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <User />
-            {t('Profile')}
+          <DropdownMenuItem asChild>
+            <Link href="/profile">
+              <User />
+              {t('Profile')}
+            </Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
             <Settings />
