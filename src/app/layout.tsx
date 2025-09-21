@@ -27,14 +27,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className={cn('font-body antialiased bg-transparent')}>
-         <div
-          className="fixed inset-0 -z-10 h-full w-full bg-cover bg-center"
-          style={{
-            backgroundImage: "url('/background.svg')",
-            opacity: 0.1,
-          }}
-        />
+      <body className={cn('font-body antialiased')}>
         {children}
         <Toaster />
       </body>

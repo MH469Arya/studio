@@ -41,7 +41,7 @@ export default function DashboardLayout({
           </Sidebar>
           <SidebarInset>
             <div
-              className="relative flex min-h-screen flex-col bg-background/80 backdrop-blur-sm"
+              className="relative flex min-h-screen flex-col bg-grid-pattern bg-background bg-opacity-10"
             >
               <Header />
               <div className="flex-1">{children}</div>

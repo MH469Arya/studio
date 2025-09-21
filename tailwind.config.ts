@@ -16,6 +16,9 @@ export default {
       },
     },
     extend: {
+      backgroundImage: {
+        'grid-pattern': "url('/background.svg')",
+      },
       fontFamily: {
         body: ['Poppins', 'sans-serif'],
         headline: ['Poppins', 'sans-serif'],
