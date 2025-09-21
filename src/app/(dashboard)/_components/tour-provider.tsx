@@ -8,7 +8,6 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
 
 interface TourContextType {
   startTour: () => void;
@@ -94,7 +93,6 @@ export const TourProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const stopTour = useCallback(() => {
     setIsOpen(false);
-    document.body.classList.remove('tour-active');
     setSpotlightStyle({});
     targetRef.current = null;
   }, []);
@@ -169,7 +167,6 @@ export const TourProvider: React.FC<{ children: React.ReactNode }> = ({ children
         };
 
     } else {
-      // if target not found, try to go to the next step
       goToNextStep();
     }
   }, [currentStep, goToNextStep]);
@@ -198,7 +195,6 @@ export const TourProvider: React.FC<{ children: React.ReactNode }> = ({ children
                     className="z-[103] w-80"
                     onEscapeKeyDown={stopTour}
                     onPointerDownOutside={(e) => {
-                        // Prevent closing if the click is on the highlighted element
                         if (targetRef.current && targetRef.current.contains(e.target as Node)) {
                             e.preventDefault();
                         } else {
