@@ -59,15 +59,6 @@ const initialProducts: Product[] = [
     category: 'Footwear',
     stock: 30,
   },
-  {
-    name: 'Handwoven Pashmina Shawl',
-    description: 'Luxurious and soft shawl from Kashmir, made from fine Pashmina wool.',
-    imageUrl: 'https://i.pinimg.com/736x/97/b9/c5/97b9c52661398b7ad793868f5876c2f8.jpg',
-    imageHint: 'pashmina shawl',
-    price: 8500,
-    category: 'Apparel',
-    stock: 15,
-  },
 ];
 
 export default function MyProductsPage() {
