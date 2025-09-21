@@ -62,7 +62,7 @@ const getSalesInsightsFlow = ai.defineFlow(
   },
   async input => {
     const llmResponse = await prompt(input);
-    const toolResponse = llmResponse.toolRequests();
+    const toolResponse = llmResponse.toolRequests;
 
     // Note: The model may not always call the tool.
     let itemsSoldVolume: number | undefined;
