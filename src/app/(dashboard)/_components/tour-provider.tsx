@@ -1,8 +1,16 @@
 'use client';
 
-import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
-import Joyride, { Step, CallBackProps } from 'react-joyride';
+import React, { createContext, useContext, useState, useCallback, ReactNode } from 'react';
 import { useLanguage } from './language-provider';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
 
 interface TourContextType {
   startTour: () => void;
@@ -18,95 +26,113 @@ export const useTour = () => {
   return context;
 };
 
+interface Step {
+  target: string;
+  title: string;
+  content: string;
+}
+
 const getTourSteps = (t: (text: string) => string): Step[] => [
   {
     target: '#nav-dashboard',
-    content: t('This is your main Dashboard, where you get an overview of your store.'),
     title: t('Dashboard'),
-    disableBeacon: true,
+    content: t('This is your main Dashboard, where you get an overview of your store.'),
   },
   {
     target: '#nav-orders',
-    content: t('Manage all your customer orders from this section.'),
     title: t('Orders'),
+    content: t('Manage all your customer orders from this section.'),
   },
   {
     target: '#nav-my-products',
-    content: t('Here you can add, view, and edit all of your product listings.'),
     title: t('My Products'),
+    content: t('Here you can add, view, and edit all of your product listings.'),
   },
   {
     target: '#nav-ai-tools',
-    content: t('Explore powerful AI tools to help you with product descriptions, sales insights, and more!'),
     title: t('AI Tools'),
+    content: t('Explore powerful AI tools to help you with product descriptions, sales insights, and more!'),
   },
   {
     target: '#user-nav-trigger',
-    content: t('Access your profile, settings, and logout from here.'),
     title: t('Your Profile'),
+    content: t('Access your profile, settings, and logout from here.'),
   },
   {
     target: '#kal-guide-trigger',
+    title: t('KlaGuide'),
     content: t('You can restart this tour anytime by clicking this button!'),
-    title: t('KalGuide'),
   },
 ];
 
-
 export const TourProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [run, setRun] = useState(false);
-  const [isClient, setIsClient] = useState(false);
   const { t } = useLanguage();
-
-  const tourSteps = getTourSteps(t);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
+  const [steps, setSteps] = useState<Step[]>([]);
+  const [currentStepIndex, setCurrentStepIndex] = useState(0);
+  const [isOpen, setIsOpen] = useState(false);
 
   const startTour = useCallback(() => {
-    setRun(true);
-  }, []);
+    const tourSteps = getTourSteps(t);
+    setSteps(tourSteps);
+    setCurrentStepIndex(0);
+    setIsOpen(true);
+  }, [t]);
 
-  const handleJoyrideCallback = (data: CallBackProps) => {
-    const { status } = data;
-    if (['finished', 'skipped'].includes(status)) {
-      setRun(false);
+  const stopTour = () => {
+    setIsOpen(false);
+    setCurrentStepIndex(0);
+    setSteps([]);
+  };
+
+  const goToNextStep = () => {
+    if (currentStepIndex < steps.length - 1) {
+      setCurrentStepIndex(prev => prev + 1);
+    } else {
+      stopTour();
     }
   };
+
+  const goToPreviousStep = () => {
+    if (currentStepIndex > 0) {
+      setCurrentStepIndex(prev => prev - 1);
+    }
+  };
+
+  const currentStep = steps[currentStepIndex];
 
   return (
     <TourContext.Provider value={{ startTour }}>
       {children}
-      {isClient && (
-        <Joyride
-          steps={tourSteps}
-          run={run}
-          callback={handleJoyrideCallback}
-          continuous
-          showProgress
-          showSkipButton
-          styles={{
-            options: {
-              zIndex: 10000,
-              primaryColor: '#D4A24E',
-              arrowColor: '#F5F5DC',
-              backgroundColor: '#F5F5DC',
-              textColor: '#333'
-            },
-            tooltip: {
-              fontFamily: 'Poppins, sans-serif',
-              borderRadius: 'var(--radius)',
-            },
-            tooltipTitle: {
-              fontFamily: 'Poppins, sans-serif',
-              fontWeight: 'bold',
-            },
-             buttonClose: {
-              display: 'none',
-            },
-          }}
-        />
+      {isOpen && currentStep && (
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
+          <DialogContent
+            className="tour-dialog"
+            onEscapeKeyDown={stopTour}
+            onPointerDownOutside={stopTour}
+          >
+            <DialogHeader>
+              <DialogTitle>{currentStep.title}</DialogTitle>
+              <DialogDescription>{currentStep.content}</DialogDescription>
+            </DialogHeader>
+            <DialogFooter className="sm:justify-between">
+              <div>
+                <span className="text-sm text-muted-foreground">
+                  Step {currentStepIndex + 1} of {steps.length}
+                </span>
+              </div>
+              <div className="flex gap-2">
+                {currentStepIndex > 0 && (
+                  <Button variant="outline" onClick={goToPreviousStep}>
+                    Previous
+                  </Button>
+                )}
+                <Button onClick={goToNextStep}>
+                  {currentStepIndex === steps.length - 1 ? 'Finish' : 'Next'}
+                </Button>
+              </div>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       )}
     </TourContext.Provider>
   );

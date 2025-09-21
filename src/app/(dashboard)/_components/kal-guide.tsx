@@ -12,7 +12,7 @@ export function KalGuide() {
       variant="ghost"
       size="icon"
       className="relative h-9 w-9 rounded-full"
-      onClick={startTour}
+      onClick={() => startTour()}
       id="kal-guide-trigger"
     >
       <Wand2 />
