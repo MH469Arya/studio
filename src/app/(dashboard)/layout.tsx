@@ -27,11 +27,11 @@ export default function DashboardLayout({
               <Link href="/" className="flex items-center gap-2">
                 <img
                   src="/assets/iconcm.svg"
-                  alt="KalConnect Logo"
+                  alt="KlaConnect Logo"
                   style={{ height: '40px', width: '40px', marginRight: '8px' }}
                 />
                 <span className="text-xl font-bold font-headline tracking-tight">
-                  KalConnect
+                  KlaConnect
                 </span>
               </Link>
             </SidebarHeader>
@@ -41,18 +41,10 @@ export default function DashboardLayout({
           </Sidebar>
           <SidebarInset>
             <div
-              className="relative flex min-h-screen flex-col"
-              style={{
-                backgroundImage: "url('/background.svg')",
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                backgroundAttachment: 'fixed',
-              }}
+              className="relative flex min-h-screen flex-col bg-background/80 backdrop-blur-sm"
             >
-              <div className="relative z-10 flex min-h-screen flex-col bg-background/80 backdrop-blur-sm">
-                <Header />
-                <div className="flex-1">{children}</div>
-              </div>
+              <Header />
+              <div className="flex-1">{children}</div>
             </div>
           </SidebarInset>
         </SidebarProvider>

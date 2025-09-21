@@ -53,7 +53,7 @@ export default function DashboardPage() {
         <div className="relative z-10 flex flex-col justify-end h-full p-6 md:p-8 text-white">
           <div className="bg-black/40 p-6 rounded-lg">
             <h1 className="text-3xl md:text-5xl font-headline font-bold shadow-2xl">
-              {t('Welcome to KalConnect')}
+              {t('Welcome to KlaConnect')}
             </h1>
             <p className="mt-2 max-w-lg text-lg text-neutral-200">
               {t('Empowering artisans, connecting cultures. Here are your tools for success.')}

@@ -4,7 +4,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { cn } from '@/lib/utils';
 
 export const metadata: Metadata = {
-  title: 'KalConnect',
+  title: 'KlaConnect',
   description: 'Empowering artisans, connecting cultures.',
 };
 
@@ -14,7 +14,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning style={{ isolation: 'isolate' }}>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
@@ -27,7 +27,14 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className={cn('font-body antialiased')}>
+      <body className={cn('font-body antialiased bg-transparent')}>
+         <div
+          className="fixed inset-0 -z-10 h-full w-full bg-cover bg-center"
+          style={{
+            backgroundImage: "url('/background.svg')",
+            opacity: 0.1,
+          }}
+        />
         {children}
         <Toaster />
       </body>

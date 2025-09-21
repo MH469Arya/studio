@@ -11,11 +11,11 @@ export function Header() {
         <Link href="/" className="flex items-center gap-2 md:hidden">
             <img
               src="/assets/iconcm.svg"
-              alt="KalConnect Logo"
+              alt="KlaConnect Logo"
               style={{ height: '40px', width: '40px', marginRight: '8px' }}
             />
            <span className="font-bold text-xl font-headline">
-            KalConnect
+            KlaConnect
           </span>
         </Link>
       </div>

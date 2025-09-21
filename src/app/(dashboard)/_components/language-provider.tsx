@@ -70,7 +70,7 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         // User Nav
         'Artisan Kumar', 'artisan.kumar@example.com', 'Profile', 'Settings', 'Choose Language', 'English', 'Hindi', 'Support', 'Log out',
         // Dashboard Page
-        'Welcome to KalConnect', 'Empowering artisans, connecting cultures. Here are your tools for success.',
+        'Welcome to KlaConnect', 'Empowering artisans, connecting cultures. Here are your tools for success.',
         'Manage Orders', 'View and process your incoming orders efficiently.', 'Go to Orders',
         'Analyze Sales', 'Get AI-powered insights into your sales performance.', 'Go to Sales',
         'Create Descriptions', 'Generate compelling product descriptions with AI.', 'Go to Products',
