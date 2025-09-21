@@ -97,7 +97,7 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         'Price (₹)', 'Avg. Order (₹)', 'New Items', 'Items Sold', 'Regional Demand', 'Get Insights', 'Error Generating Insights',
         'Sales & Pricing Insights', 'AI analysis of your sales data will appear here.', 'Inventory Alert',
         "You've created more items than you've sold in this period. The AI insights may include strategies to address this.",
-        'Waiting for sales data...',
+        'Waiting for sales data...', 'Sales Data Fetched', 'The AI found that you have sold', 'units of this product based on your order history.',
         // Trending Crafts Page
         'Trending Craft Insights', 'Market Data', 'Enter market data to discover trending crafts.',
         'Recent Sales Data', 'Consumer Feedback', 'Demographic Data', 'Discover Trends', 'Error Discovering Trends',

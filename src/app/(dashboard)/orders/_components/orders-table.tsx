@@ -26,17 +26,9 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { useLanguage } from '../../_components/language-provider';
+import type { Order } from '@/services/orders-service';
+import { getOrders } from '@/services/orders-service';
 
-const mockOrders = [
-    { id: 'ORD001', customer: 'Ravi Kumar', product: 'Ganjifa Cards', date: '2023-11-23', status: 'Fulfilled', total: '₹2,59.00' },
-    { id: 'ORD002', customer: 'Priya Sharma', product: 'Kolhapuri Chappals', date: '2023-11-20', status: 'Shipped', total: '₹469.00' },
-    { id: 'ORD003', customer: 'Amit Patel', product: 'Ganjifa Cards', date: '2023-11-22', status: 'Processing', total: '₹259.00' },
-    { id: 'ORD004', customer: 'Sunita Devi', product: 'Kolhapuri Chappals', date: '2023-11-21', status: 'Fulfilled', total: '₹469.00' },
-    { id: 'ORD005', customer: 'Vikram Singh', product: 'Ganjifa Cards', date: '2023-11-24', status: 'Pending', total: '₹259.00' },
-    { id: 'ORD006', customer: 'Anjali Gupta', product: 'Kolhapuri Chappals', date: '2023-11-19', status: 'Cancelled', total: '₹469.00' },
-    { id: 'ORD007', customer: 'Deepak Verma', product: 'Ganjifa Cards', date: '2023-11-25', status: 'Processing', total: '₹259.00' },
-    { id: 'ORD008', customer: 'Meera Iyer', product: 'Kolhapuri Chappals', date: '2023-11-18', status: 'Fulfilled', total: '₹469.00' },
-];
 
 const getStatusVariant = (status: string) => {
     switch (status) {
@@ -54,10 +46,15 @@ const getStatusVariant = (status: string) => {
 };
 
 export function OrdersTable() {
+  const [orders, setOrders] = React.useState<Order[]>([]);
   const [statusFilter, setStatusFilter] = React.useState<string[]>(['Processing', 'Pending', 'Shipped']);
   const { t } = useLanguage();
 
-  const filteredOrders = mockOrders.filter(order => statusFilter.includes(order.status));
+  React.useEffect(() => {
+    getOrders().then(setOrders);
+  }, []);
+
+  const filteredOrders = orders.filter(order => statusFilter.includes(order.status));
 
   const toggleStatusFilter = (status: string) => {
     setStatusFilter(prev => 

@@ -8,3 +8,4 @@ import '@/ai/flows/get-sales-insights.ts';
 import '@/ai/flows/discover-trending-crafts.ts';
 import '@/ai/flows/suggest-product-price.ts';
 import '@/ai/flows/translate-text.ts';
+import '@/ai/tools/get-sales-data.ts';

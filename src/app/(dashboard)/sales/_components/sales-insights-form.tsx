@@ -21,7 +21,6 @@ const formSchema = z.object({
   averageOrderValue: z.coerce.number().positive(),
   regionalDemand: z.string().min(3),
   newItemVolume: z.coerce.number().int().min(0),
-  itemsSoldVolume: z.coerce.number().int().min(0),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -30,6 +29,7 @@ export function SalesInsightsForm() {
   const [insights, setInsights] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [showInventoryAlert, setShowInventoryAlert] = useState(false);
+  const [fetchedItemsSold, setFetchedItemsSold] = useState<number | null>(null);
   const { toast } = useToast();
   const { t } = useLanguage();
 
@@ -42,7 +42,6 @@ export function SalesInsightsForm() {
       averageOrderValue: 9200,
       regionalDemand: 'High in North India, moderate in metropolitan areas',
       newItemVolume: 50,
-      itemsSoldVolume: 35,
     },
   });
 
@@ -50,14 +49,19 @@ export function SalesInsightsForm() {
     setIsLoading(true);
     setInsights('');
     setShowInventoryAlert(false);
-
-    if (values.newItemVolume > values.itemsSoldVolume) {
-        setShowInventoryAlert(true);
-    }
+    setFetchedItemsSold(null);
 
     try {
       const result = await getSalesInsights(values);
       setInsights(result.insights);
+
+      if (result.itemsSoldVolume !== undefined) {
+        setFetchedItemsSold(result.itemsSoldVolume);
+        if (values.newItemVolume > result.itemsSoldVolume) {
+            setShowInventoryAlert(true);
+        }
+      }
+
     } catch (error) {
       console.error(error);
       toast({
@@ -97,9 +101,6 @@ export function SalesInsightsForm() {
                     <FormField control={form.control} name="newItemVolume" render={({ field }) => (
                         <FormItem><FormLabel>{t('New Items')}</FormLabel><FormControl><Input type="number" {...field} /></FormControl><FormMessage /></FormItem>
                     )} />
-                    <FormField control={form.control} name="itemsSoldVolume" render={({ field }) => (
-                        <FormItem><FormLabel>{t('Items Sold')}</FormLabel><FormControl><Input type="number" {...field} /></FormControl><FormMessage /></FormItem>
-                    )} />
                 </div>
                 <FormField control={form.control} name="regionalDemand" render={({ field }) => (
                     <FormItem><FormLabel>{t('Regional Demand')}</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
@@ -127,6 +128,15 @@ export function SalesInsightsForm() {
                     <AlertTitle>{t('Inventory Alert')}</AlertTitle>
                     <AlertDescription>
                         {t("You've created more items than you've sold in this period. The AI insights may include strategies to address this.")}
+                    </AlertDescription>
+                </Alert>
+             )}
+             {fetchedItemsSold !== null && (
+                 <Alert>
+                    <Lightbulb className="h-4 w-4" />
+                    <AlertTitle>{t('Sales Data Fetched')}</AlertTitle>
+                    <AlertDescription>
+                        {t('The AI found that you have sold')} {fetchedItemsSold} {t('units of this product based on your order history.')}
                     </AlertDescription>
                 </Alert>
              )}
