@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, useCallback, useEffect, useTransition } from 'react';
-import { translateText } from '@/ai/flows/translate-text';
+import { translateText, TranslateTextOutput } from '@/ai/flows/translate-text';
 
 type Locale = 'en' | 'hi';
 
@@ -45,7 +45,7 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
     try {
         const uniqueTexts = Array.from(new Set(textsToTranslate));
-        const result = await translateText({ texts: uniqueTexts });
+        const result: TranslateTextOutput = await translateText({ texts: uniqueTexts });
         if (result.translations) {
             const newTranslations = result.translations.reduce((acc, pair) => {
               acc[pair.english] = pair.hindi;
@@ -87,6 +87,7 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         // Orders Page
         'Manage and track your recent orders.', 'Filter Status', 'Filter by status', 'Order ID', 'Customer', 'Product', 'Date', 'Status', 'Total', 'Actions',
         'View Details', 'Print Invoice', 'No orders found.', 'Previous', 'Next', 'Fulfilled', 'Shipped', 'Processing', 'Pending', 'Cancelled',
+        'Sales Overview', 'A visual representation of your sales performance.', 'This Week', 'This Month', 'This Year', 'Sales', 'Loading sales data...',
         // Product Descriptions Page
         'AI Product Descriptions', 'Product Details', 'Enter your product information to generate a description.',
         'Craftsmanship Details', 'Cultural Significance', 'Target Audience', 'Generate Description', 'Error Generating Description',

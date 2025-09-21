@@ -1,6 +1,8 @@
 
 'use server';
 
+import { subDays, format } from 'date-fns';
+
 export type Order = {
     id: string;
     customer: string;
@@ -10,21 +12,39 @@ export type Order = {
     total: string;
 };
 
-const mockOrders: Order[] = [
-    { id: 'ORD001', customer: 'Ravi Kumar', product: 'Ganjifa Cards', date: '2023-11-23', status: 'Fulfilled', total: '₹2,59.00' },
-    { id: 'ORD002', customer: 'Priya Sharma', product: 'Kolhapuri Chappals', date: '2023-11-20', status: 'Shipped', total: '₹469.00' },
-    { id: 'ORD003', customer: 'Amit Patel', product: 'Ganjifa Cards', date: '2023-11-22', status: 'Processing', total: '₹259.00' },
-    { id: 'ORD004', customer: 'Sunita Devi', product: 'Kolhapuri Chappals', date: '2023-11-21', status: 'Fulfilled', total: '₹469.00' },
-    { id: 'ORD005', customer: 'Vikram Singh', product: 'Ganjifa Cards', date: '2023-11-24', status: 'Pending', total: '₹259.00' },
-    { id: 'ORD006', customer: 'Anjali Gupta', product: 'Kolhapuri Chappals', date: '2023-11-19', status: 'Cancelled', total: '₹469.00' },
-    { id: 'ORD007', customer: 'Deepak Verma', product: 'Ganjifa Cards', date: '2023-11-25', status: 'Processing', total: '₹259.00' },
-    { id: 'ORD008', customer: 'Meera Iyer', product: 'Kolhapuri Chappals', date: '2023-11-18', status: 'Fulfilled', total: '₹469.00' },
-    // Add more orders to make the data richer
-    { id: 'ORD009', customer: 'Rajesh Singh', product: 'Handwoven Pashmina Shawl', date: '2023-11-26', status: 'Shipped', total: '₹8500.00' },
-    { id: 'ORD010', customer: 'Sneha Reddy', product: 'Handwoven Pashmina Shawl', date: '2023-11-27', status: 'Processing', total: '₹8500.00' },
-    { id: 'ORD011', customer: 'Kavita Nair', product: 'Handwoven Pashmina Shawl', date: '2023-11-28', status: 'Fulfilled', total: '₹8500.00' },
-     { id: 'ORD012', customer: 'Suresh Menon', product: 'Handwoven Pashmina Shawl', date: '2023-11-28', status: 'Fulfilled', total: '₹8500.00' },
-];
+// Generate more dynamic mock data for better chart visualization
+const generateMockOrders = (): Order[] => {
+    const orders: Order[] = [];
+    const today = new Date();
+    const products = [
+        { name: 'Ganjifa Cards', price: 259 },
+        { name: 'Kolhapuri Chappals', price: 469 },
+        { name: 'Handwoven Pashmina Shawl', price: 8500 },
+        { name: 'Block-Printed Tablecloth', price: 1200 },
+        { name: 'Terracotta Diyas (Set of 4)', price: 150 },
+    ];
+    const customers = ['Ravi Kumar', 'Priya Sharma', 'Amit Patel', 'Sunita Devi', 'Vikram Singh', 'Anjali Gupta', 'Deepak Verma', 'Meera Iyer'];
+    const statuses: Order['status'][] = ['Fulfilled', 'Shipped', 'Processing', 'Pending', 'Cancelled'];
+
+    // Generate orders for the past year
+    for (let i = 0; i < 200; i++) {
+        const product = products[Math.floor(Math.random() * products.length)];
+        const date = subDays(today, Math.floor(Math.random() * 365));
+        
+        orders.push({
+            id: `ORD${String(1000 + i).padStart(4, '0')}`,
+            customer: customers[Math.floor(Math.random() * customers.length)],
+            product: product.name,
+            date: format(date, 'yyyy-MM-dd'),
+            status: statuses[Math.floor(Math.random() * statuses.length)],
+            total: `₹${product.price.toFixed(2)}`,
+        });
+    }
+
+    return orders.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+};
+
+const mockOrders: Order[] = generateMockOrders();
 
 export async function getOrders(): Promise<Order[]> {
     // In a real app, you would fetch this from a database.
